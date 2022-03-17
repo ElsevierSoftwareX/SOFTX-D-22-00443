@@ -1,5 +1,17 @@
+"""
+Created on Fri Nov 19 12:16:08 2021
+@author: Siamak Khatami
+@Email: siamak.khatami@ntnu.no
+@License: https://creativecommons.org/licenses/by-nc-sa/4.0/
+@Source: https://github.com/copatrec/copatrec
+@document: https://github.com/copatrec/copatrec
+"""
+
 
 class CST:
+    def __init__(self):
+        pass
+
     Panel = 'Panel'
     Time_Series = 'Time_Series'
     Cross_Sectional = 'Cross_Sectional'
@@ -18,13 +30,15 @@ class CST:
     ALL = 'ALL'
     Cat = 'Category'
     Time = 'Time'
-    Github_URL = "https://github.com/copatrec"
+    Github_URL = "https://github.com/copatrec/copatrec"
     Note = "Note: "
     Statistic = "Statistic: "
     P_val = "p_value:"
 
 
 class Warns:
+    def __init__(self):
+        pass
     W101 = "Outliers have been dropped. It is highly recommended to check dropped" \
            "values by an expert."
     W102 = "Analysis error: The number of observations are less than 10."
@@ -67,13 +81,12 @@ class Warns:
 
 
 class Errs:
+    def __init__(self):
+        pass
     E000 = ""
     Ignore = "ignore"
     #  Basic Errors
     E101 = "RuntimeError"
-    # TODO: Try to say scipy error term better.
-    #  For example fev=8000 means something is going wrong on the equation or the data
-
     #  Package Errors
     E201 = "Cannot fit none of equation forms."
     E202 = "Cannot find any fitted function to plot."

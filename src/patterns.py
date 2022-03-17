@@ -5,13 +5,15 @@ Created on Fri Sep  3 11:39:18 2021
 @author: Siamak Khatami
 @Email: siamak.khatami@ntnu.no
 @License: https://creativecommons.org/licenses/by-nc-sa/4.0/
-@Source: https://github.com/siamak-khatami/copatrec.git
-@document: https://github.com/siamak-khatami/copatrec-document.git
+@Source: https://github.com/copatrec/copatrec
+@document: https://github.com/copatrec/copatrec
 """
 import numpy as np
 
 
 class _EquFuncs:
+    def __init__(self):
+        pass
 
     @staticmethod
     def sin(x, a, b, c, d):
@@ -101,6 +103,9 @@ class _EquFuncs:
 
 
 class _EquPatterns:
+
+    def __init__(self):
+        pass
 
     @staticmethod
     def sin(popt):

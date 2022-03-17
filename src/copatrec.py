@@ -4,9 +4,8 @@ Created on Wed Sep  1 12:03:18 2021
 @author: Siamak Khatami
 @Email: siamak.khatami@ntnu.no
 @License: https://creativecommons.org/licenses/by-nc-sa/4.0/
-@Source: https://github.com/siamak-khatami/copatrec.git
-@document: https://github.com/siamak-khatami/copatrec-document.git
-TODO: Github repo should be changed and updated in the docstrings of functions
+@Source: https://github.com/copatrec/copatrec
+@document: https://github.com/copatrec/copatrec
 """
 import warnings
 import matplotlib.pyplot as plt
@@ -380,7 +379,7 @@ class Copatrec:
         :return:
         A list of outlier values' names
         """
-        # TODO: Error here as well as parameetrs have not been typelelized
+
         outlier_names = (category_names[values < low_band].tolist(),
                          category_names[values > upper_band].tolist())
         return outlier_names
@@ -690,7 +689,7 @@ class Copatrec:
             (dict, dict):
         """
         panel_outliers() calculates the outliers, by assuming the analysis type is panel.
-        it will calculate intervals and outliers list corresponding to each variable'f mean
+        it will calculate intervals and outliers list corresponding to each variable's mean
         of the categories (not all the data for all dependent and independent).
         The returned data are two dictionaries and their keys are intervals[variable name]
         and outliers[variable name]. In addition, there are some parameters to support plots
@@ -1301,8 +1300,6 @@ class Copatrec:
                                 outliers=outliers, intervals=intervals, alpha=alpha,
                                 cross_section_time=cross_section_time, time_series_category=time_series_category)
         return popt, p_cov, data, model_summary
-
-
 
     def __preprocessing(self,
                         data: pd.DataFrame,

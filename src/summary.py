@@ -5,8 +5,8 @@ Created on Fri Nov 19 12:16:08 2021
 @author: Siamak Khatami
 @Email: siamak.khatami@ntnu.no
 @License: https://creativecommons.org/licenses/by-nc-sa/4.0/
-@Source: https://github.com/siamak-khatami/copatrec.git
-@document: https://github.com/siamak-khatami/copatrec-document.git
+@Source: https://github.com/copatrec/copatrec
+@document: https://github.com/copatrec/copatrec
 """
 import numpy as np
 import pandas as pd
@@ -284,7 +284,7 @@ class Summary:
             # ------------------------------------------
             alignment = int(align/6)
             print('Param'.ljust(alignment),
-                  'Coeff'.ljust(alignment),
+                  'Coefficients'.ljust(alignment),
                   'Str.Err'.ljust(alignment),
                   'T_stat'.ljust(alignment),
                   'p_value'.ljust(alignment),

@@ -5,8 +5,8 @@ Created on Wed Sep  1 10:23:42 2021
 @author: Siamak Khatami
 @Email: siamak.khatami@ntnu.no
 @License: https://creativecommons.org/licenses/by-nc-sa/4.0/
-@Source: https://github.com/siamak-khatami/copatrec.git
-@document: https://github.com/siamak-khatami/copatrec-documnet.git
+@Source: https://github.com/copatrec/copatrec
+@document: https://github.com/copatrec/copatrec
 """
 try:
     from .src import Copatrec
