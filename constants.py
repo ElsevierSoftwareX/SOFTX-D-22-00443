@@ -5,6 +5,7 @@ Created on Fri Nov 19 12:16:08 2021
 @License: https://creativecommons.org/licenses/by-nc-sa/4.0/
 @Source: https://github.com/copatrec/copatrec
 @document: https://github.com/copatrec/copatrec
+@Cite:
 """
 
 
@@ -39,15 +40,14 @@ class CST:
 class Warns:
     def __init__(self):
         pass
-    W101 = "Outliers have been dropped. It is highly recommended to check dropped" \
-           "values by an expert."
+    W101 = "It is highly recommended to drop outliers by an expert of the field."
     W102 = "Analysis error: The number of observations are less than 10."
     #  Result Messages
     R101 = "Fitted"
     R102 = "Done"
 
     #  Progress
-    P101 = "Looking for the outliers"
+    P101 = "Finding outliers, Method:{}"
 
     #  Equation Forms
     EF101 = 'Warning: Here xb equation Represents tanh.'

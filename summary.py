@@ -7,6 +7,7 @@ Created on Fri Nov 19 12:16:08 2021
 @License: https://creativecommons.org/licenses/by-nc-sa/4.0/
 @Source: https://github.com/copatrec/copatrec
 @document: https://github.com/copatrec/copatrec
+@Cite:
 """
 import numpy as np
 import pandas as pd
@@ -73,6 +74,9 @@ class SumHelp:
 
 
 class Summary:
+    """
+    It could be possible to define the summary class as a Data Classes, but maybe later
+    """
     def __init__(self,
                  data: pd,
                  coefficients: np.array,

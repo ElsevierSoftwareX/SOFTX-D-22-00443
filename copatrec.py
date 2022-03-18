@@ -6,6 +6,7 @@ Created on Wed Sep  1 12:03:18 2021
 @License: https://creativecommons.org/licenses/by-nc-sa/4.0/
 @Source: https://github.com/copatrec/copatrec
 @document: https://github.com/copatrec/copatrec
+@Cite:
 """
 import warnings
 import matplotlib.pyplot as plt
@@ -490,7 +491,7 @@ class Copatrec:
         :return:
         intervals[variable name][category] |  outliers[variable name][category]
         """
-        print(Warns.P101.center(40, '*'))
+        print(Warns.P101.format(method).center(40, '*'))
         print(Warns.W101)
         dict_intervals = {}  # dict[var] = dict[cat]
         dict_standard_values = {}  # dict[var] = dict[cat]
@@ -499,6 +500,7 @@ class Copatrec:
         # Creating grouped dataframes based on the categories presented in the Dataframe.
 
         for var in [self.Dependent_var] + self.Independent_var:
+            print(var.ljust(10, '-'))
             this_var_dict_intervals = {}  # dict[cat] = tuple(lower band , upper band)
             this_var_dict_standard_values = {}  # dict[cat] = values
             this_var_dict_outliers = {}  # dict[cat] = tuple(based on lower band, based on upper band)
@@ -604,7 +606,7 @@ class Copatrec:
         :return:
         intervals[variable name][category] |  outliers[variable name][category]
         """
-        print(Warns.P101.center(40, '*'))
+        print(Warns.P101.format(method).center(40, '*'))
         print(Warns.W101)
         dict_intervals = {}  # dict[var] = dict[time]
         dict_standard_values = {}  # dict[var] = dict[time]
@@ -612,6 +614,7 @@ class Copatrec:
         grouped_data_by_time_col = self.Data.groupby([self.Time_col])
 
         for var in [self.Dependent_var] + self.Independent_var:
+            print(var.ljust(10, '-'))
             this_var_dict_intervals = {}  # dict[time]
             this_var_dict_standard_values = {}  # dict[time]
             this_var_dict_outliers = {}  # dict[time]
@@ -739,7 +742,7 @@ class Copatrec:
         in panel data sets are unbalanced data. 
 
         """
-        print(Warns.P101.center(40, '*'))
+        print(Warns.P101.format(method).center(40, '*'))
         print(Warns.W101)
         dict_intervals = {}
         dict_standard_values = {}
@@ -750,6 +753,7 @@ class Copatrec:
         list_category_names = grouped_data_by_category_col[
             self.Dependent_var].describe().index.values  # getting all category names
         for var in [self.Dependent_var] + self.Independent_var:
+            print(var.ljust(10, '-'))
             this_var_data, _ = self.__calc_mean_std(
                 grouped_data_by_category_col[var])  # mean of categories are used to establish the intervals
 

@@ -7,6 +7,7 @@ Created on Fri Sep  3 11:39:18 2021
 @License: https://creativecommons.org/licenses/by-nc-sa/4.0/
 @Source: https://github.com/copatrec/copatrec
 @document: https://github.com/copatrec/copatrec
+@Cite:
 """
 import numpy as np
 

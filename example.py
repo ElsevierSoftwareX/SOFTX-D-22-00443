@@ -7,6 +7,7 @@ Created on Wed Sep  1 10:23:42 2021
 @License: https://creativecommons.org/licenses/by-nc-sa/4.0/
 @Source: https://github.com/copatrec/copatrec
 @document: https://github.com/copatrec/copatrec
+@Cite:
 """
 try:
     from .src import Copatrec
@@ -16,11 +17,10 @@ import pandas as pd
 from sys import exit
 import pickle
 data = pd.read_pickle("./Data/Data.pkl")
-
-
 time_Col = 'year'
 category_column = 'countryname'
 Dep_Var = 'gdppc'
+
 SM = Copatrec(data, Dep_Var, time_Col, category_column)
 #intervals, outliers = SM.panel_outliers(method='beta', plot_pairs = True, plot_hists = True, plot_outliers_name=True)
 #intervals, outliers = SM.cross_sectional_outliers(sl=0.05, method='beta', plot_pairs=True, plot_hists=False, plot_outliers_name=False)
