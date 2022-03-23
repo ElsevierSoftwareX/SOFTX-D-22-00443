@@ -21,7 +21,7 @@ time_Col = 'year'
 category_column = 'countryname'
 Dep_Var = 'gdppc'
 # TODO: Warnings for the third parties should be mananged to enter to log
-SM = Copatrec(data, Dep_Var, time_Col, category_column, True, True)
+SM = Copatrec(data, Dep_Var, time_Col, category_column, True, False)
 
 
 intervals, outliers = SM.panel_outliers(method='beta', plot_pairs = False, plot_hists = False, plot_outliers_name=True)

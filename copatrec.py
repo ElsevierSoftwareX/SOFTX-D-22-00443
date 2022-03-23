@@ -50,7 +50,7 @@ class Copatrec:
         :type: str
         :param category_col: The column name in the dataframe which represents categories names.
         :type: str
-        :param report: Weather to report the process or not.
+        :param report: whether to report the process or not.
         :type: bool
         :param report_to_file: Whether to print report into a file (True) or in the Terminal(False)
         The default value is False.
@@ -370,7 +370,7 @@ class Copatrec:
         :param outliers: [[], []]; A nested list of outliers corresponding to the lower and upper
         bands
         :param title: A string to print as title of histogram plot
-        :param plot_outliers_name: Weather to print the outliers' name in the plot title or not.
+        :param plot_outliers_name: whether to print the outliers' name in the plot title or not.
         """
         if not np.isnan(data).all():
             plt.figure(figsize=(10, 10))
@@ -508,11 +508,11 @@ class Copatrec:
         :type: float
         :param method: method of calculating intervals, 'beta', 'normal' or 'IQR'
         :type: str
-        :param plot_pairs: Weather plot intervals in a scatter pair mode (independent variable, dependent variable)
+        :param plot_pairs: whether plot intervals in a scatter pair mode (independent variable, dependent variable)
         :type: bool
-        :param plot_hists: Weather plot intervals on the histogram per each variable
+        :param plot_hists: whether plot intervals on the histogram per each variable
         :type: bool
-        :param plot_outliers_name: Weather to print outliers' names on the histogram title or not.
+        :param plot_outliers_name: whether to print outliers' names on the histogram title or not.
                                     Only works, if plot_pairs = True or plot_hist = True.
         :type: bool
         :return:
@@ -624,11 +624,11 @@ class Copatrec:
         :type: float
         :param method: method of calculating intervals, 'beta', 'normal' or 'IQR'
         :type: str
-        :param plot_pairs: Weather plot intervals in a scatter pair mode (independent variable, dependent variable)
+        :param plot_pairs: whether plot intervals in a scatter pair mode (independent variable, dependent variable)
         :type: bool
-        :param plot_hists: Weather plot intervals on the histogram per each variable
+        :param plot_hists: whether plot intervals on the histogram per each variable
         :type: bool
-        :param plot_outliers_name: Weather to print outliers' names on the histogram title or not.
+        :param plot_outliers_name: whether to print outliers' names on the histogram title or not.
                                     Only works, if plot_pairs = True or plot_hist = True.
         :type: bool
         :return:
@@ -734,11 +734,11 @@ class Copatrec:
         :type: float
         :param method: method of calculating intervals, 'beta', 'normal' or 'IQR'
         :type: str
-        :param plot_pairs: Weather plot intervals in a scatter pair mode (independent variable, dependent variable)
+        :param plot_pairs: whether plot intervals in a scatter pair mode (independent variable, dependent variable)
         :type: bool
-        :param plot_hists: Weather plot intervals on the histogram per each variable
+        :param plot_hists: whether plot intervals on the histogram per each variable
         :type: bool
-        :param plot_outliers_name: Weather to print outliers' names on the histogram title or not.
+        :param plot_outliers_name: whether to print outliers' names on the histogram title or not.
                                     Only works, if plot_pairs = True or plot_hist = True.
         :type: bool
         :return:
@@ -863,15 +863,15 @@ class Copatrec:
         :param max_epochs: Maximum number of iterations the Ml optimizer should try to re-adjust
         its findings;
         :param alpha: Significant level
-        :param standardization: Weather to standardize data or not
+        :param standardization: whether to standardize data or not
         :param plot: To plot the results or not
         :param plot_only_best: To plot best fitted function or all functions.
         There are "number of independent variables" * "number of categories" * "number of equation forms";
         amount of fitting process. Sometimes, if the data set is so variant, there can be hundreds of plot.
         In order to be effective, by putting this option to True, it only plots the best fitted equation form
         for "number of independent variables" * "number of categories" of progress;
-        :param show_time_label: Weather to show the times' labels on the plots or not
-        :param drop_outliers: Weather to do an outliers pre-processing or not
+        :param show_time_label: whether to show the times' labels on the plots or not
+        :param drop_outliers: whether to do an outliers pre-processing or not
         :param show_outliers: if drop_outliers, should it show outliers points on the equation plot or not
         :param plot_predicted_outliers: if drop_outliers, should it show "Predicted" parts of fitted function
         related to the outliers or not. If False, it will only draw predicted line for the valid data
@@ -1014,15 +1014,15 @@ class Copatrec:
         :param max_epochs: Maximum number of iterations the Ml optimizer should try to re-adjust
         its findings;
         :param alpha: Significant level
-        :param standardization: Weather to standardize data or not
+        :param standardization: whether to standardize data or not
         :param plot: To plot the results or not
         :param plot_only_best: To plot best fitted function or all functions.
         There are "number of independent variables" * "number of categories" * "number of equation forms";
         amount of fitting process. Sometimes, if the data set is so variant, there can be hundreds of plot.
         In order to be effective, by putting this option to True, it only plots the best fitted equation form
         for "number of independent variables" * "number of categories" of progress;
-        :param show_category_label: Weather to show the categories' labels on the plots or not
-        :param drop_outliers: Weather to do an outliers pre-processing or not
+        :param show_category_label: whether to show the categories' labels on the plots or not
+        :param drop_outliers: whether to do an outliers pre-processing or not
         :param show_outliers: if drop_outliers, should it show outliers points on the equation plot or not
         :param plot_predicted_outliers: if drop_outliers, should it show "Predicted" parts of fitted function
         related to the outliers or not. If False, it will only draw predicted line for the valid data
@@ -1162,11 +1162,11 @@ class Copatrec:
         :param max_epochs: Maximum number of iterations the Ml optimizer should try to re-adjust
         its findings;
         :param alpha: Significant level
-        :param standardization: Weather to standardize data or not
+        :param standardization: whether to standardize data or not
         :param plot: To plot the results or not
-        :param show_time_label: Weather to show the times' labels on the plots or not
-        :param show_category_label: Weather to show the categories' labels on the plots or not
-        :param drop_outliers: Weather to do an outliers pre-processing or not
+        :param show_time_label: whether to show the times' labels on the plots or not
+        :param show_category_label: whether to show the categories' labels on the plots or not
+        :param drop_outliers: whether to do an outliers pre-processing or not
         :param show_outliers: if drop_outliers, should it show outliers points on the equation plot or not
         :param plot_predicted_outliers: if drop_outliers, should it show "Predicted" parts of fitted function
         related to the outliers or not. If False, it will only draw predicted line for the valid data
@@ -1354,7 +1354,7 @@ class Copatrec:
         :type: pd.DataFrame
         :param regression_type: panel, time_series or cross_sectional
         :type: str
-        :param standardization: Weather to standardize the data or not
+        :param standardization: whether to standardize the data or not
         :type: bool
         :param drop_outliers:
         :type: bool
