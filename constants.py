@@ -47,7 +47,7 @@ class Warns:
     R102 = "Done"
 
     #  Progress
-    P101 = "Finding outliers, Method:{}"
+    P101 = "Finding outliers for a {} analysis, Method:{}"
 
     #  Equation Forms
     EF101 = 'Warning: Here xb equation Represents tanh.'

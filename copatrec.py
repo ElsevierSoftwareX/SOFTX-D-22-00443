@@ -8,7 +8,11 @@ Created on Wed Sep  1 12:03:18 2021
 @document: https://github.com/copatrec/copatrec
 @Cite:
 """
+import inspect
+import logging as lg
+import os
 import warnings
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -18,13 +22,13 @@ from scipy.optimize import curve_fit
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 try:
-    from .patterns import _EquFuncs, _EquPatterns
-    from .summary import Summary
-    from .constants import CST, Warns, Errs
-except ImportError:
     from patterns import _EquFuncs, _EquPatterns
     from summary import Summary
     from constants import CST, Warns, Errs
+except ImportError:
+    from .patterns import _EquFuncs, _EquPatterns
+    from .summary import Summary
+    from .constants import CST, Warns, Errs
 
 
 class Copatrec:
@@ -32,7 +36,9 @@ class Copatrec:
                  data: pd.DataFrame,
                  dependent_var: str,
                  time_col: str = "",
-                 category_col: str = ""
+                 category_col: str = "",
+                 report: bool = True,
+                 report_to_file: bool = True
                  ):
         """
         COPATREC initializer function
@@ -44,6 +50,11 @@ class Copatrec:
         :type: str
         :param category_col: The column name in the dataframe which represents categories names.
         :type: str
+        :param report: Weather to report the process or not.
+        :type: bool
+        :param report_to_file: Whether to print report into a file (True) or in the Terminal(False)
+        The default value is False.
+        :type: bool
         """
         #   Initialization
         self.__EquFuncs = _EquFuncs  # saving _EquFuncs class into a class object.
@@ -86,6 +97,18 @@ class Copatrec:
             self.Dependent_var
         ]]  # All columns excepts dependent variable, time and category columns are counted as independent variable.
         self.__fix_data_types()  # Reformat data in the dataset.
+        if report:
+            args = {
+                'level': lg.INFO,
+                'format': '%(levelname)s - %(message)s',
+                'filemode': 'w'
+            }
+            if report_to_file:
+                caller_file_name = os.path.basename(inspect.stack()[1].filename).split('.')[0]
+                args['filename'] = caller_file_name+'.log'
+            lg.basicConfig(**args)
+        else:
+            lg.disable()
 
     def __fix_data_types(self):
         """
@@ -129,9 +152,13 @@ class Copatrec:
         :type: float
         :return: alpha| beta
         """
-        n = (mean * (1-mean)) / std**2
+        lg.captureWarnings(True)
+
+        n = (mean * (1 - mean)) / np.power(std, 2)
         alpha = mean * n
-        beta = (1-mean) * n
+        beta = (1 - mean) * n
+        # with warnings.catch_warnings():
+        #       warnings.simplefilter("ignore")
         return alpha, beta
 
     @staticmethod
@@ -393,7 +420,7 @@ class Copatrec:
             try:
                 outs.extend(values[0])
                 outs.extend(values[1])
-            except ValueError:
+            except IndexError:
                 continue
         return list(dict.fromkeys(outs))
 
@@ -491,8 +518,8 @@ class Copatrec:
         :return:
         intervals[variable name][category] |  outliers[variable name][category]
         """
-        print(Warns.P101.format(method).center(40, '*'))
-        print(Warns.W101)
+        lg.info(Warns.P101.format(CST.Time_Series, method).center(40, '*'))
+        lg.warning(Warns.W101)
         dict_intervals = {}  # dict[var] = dict[cat]
         dict_standard_values = {}  # dict[var] = dict[cat]
         dict_outliers = {}  # dict[var] = dict[cat]
@@ -500,7 +527,7 @@ class Copatrec:
         # Creating grouped dataframes based on the categories presented in the Dataframe.
 
         for var in [self.Dependent_var] + self.Independent_var:
-            print(var.ljust(10, '-'))
+            lg.info('variable {} started.'.format(var).ljust(20, '-'))
             this_var_dict_intervals = {}  # dict[cat] = tuple(lower band , upper band)
             this_var_dict_standard_values = {}  # dict[cat] = values
             this_var_dict_outliers = {}  # dict[cat] = tuple(based on lower band, based on upper band)
@@ -522,7 +549,7 @@ class Copatrec:
                     this_var_dict_outliers[cat] = outliers
 
                     if error_term:
-                        print(error_term)
+                        lg.error(error_term)
                     else:
                         if plot_hists:
                             title = CST.Hist_title.format(var, method, CST.ALL, cat)
@@ -545,11 +572,12 @@ class Copatrec:
                     this_var_dict_intervals[cat] = (np.nan, np.nan)
                     this_var_dict_standard_values[cat] = np.array([])
                     this_var_dict_outliers[cat] = []
-                    print(Errs.E207.format(var, cat, CST.ALL))  # All rows are empty
+                    lg.error(Errs.E207.format(var, cat, CST.ALL))  # All rows are empty
 
             dict_intervals[var] = this_var_dict_intervals
             dict_standard_values[var] = this_var_dict_standard_values
             dict_outliers[var] = this_var_dict_outliers
+            lg.info('variable {} done.'.format(var).ljust(20, '-'))
         if plot_pairs:
             for x_var in self.Independent_var:
                 for cat, cat_dt in grouped_data_by_cat_col:
@@ -572,7 +600,7 @@ class Copatrec:
                                               method,
                                               plot_outliers_name)
                     else:
-                        print(Errs.E206.format(x=x_var, y=self.Dependent_var, c=cat, t=CST.ALL))
+                        lg.warning(Errs.E206.format(x=x_var, y=self.Dependent_var, c=cat, t=CST.ALL))
 
         return dict_intervals, dict_outliers
 
@@ -606,15 +634,15 @@ class Copatrec:
         :return:
         intervals[variable name][category] |  outliers[variable name][category]
         """
-        print(Warns.P101.format(method).center(40, '*'))
-        print(Warns.W101)
+        lg.info(Warns.P101.format(CST.Cross_Sectional, method).center(40, '*'))
+        lg.warning(Warns.W101)
         dict_intervals = {}  # dict[var] = dict[time]
         dict_standard_values = {}  # dict[var] = dict[time]
         dict_outliers = {}  # dict[var] = dict[time]
         grouped_data_by_time_col = self.Data.groupby([self.Time_col])
 
         for var in [self.Dependent_var] + self.Independent_var:
-            print(var.ljust(10, '-'))
+            lg.info('variable {} started.'.format(var).ljust(20, '-'))
             this_var_dict_intervals = {}  # dict[time]
             this_var_dict_standard_values = {}  # dict[time]
             this_var_dict_outliers = {}  # dict[time]
@@ -635,7 +663,7 @@ class Copatrec:
                     this_var_dict_standard_values[time] = standard_values
                     this_var_dict_outliers[time] = outliers
                     if error_term:
-                        print(error_term)
+                        lg.error(error_term)
                     else:
                         if plot_hists:
                             title = CST.Hist_title.format(var, method, time, CST.ALL)
@@ -655,11 +683,12 @@ class Copatrec:
                     this_var_dict_intervals[time] = (np.nan, np.nan)
                     this_var_dict_standard_values[time] = np.array([])
                     this_var_dict_outliers[time] = []
-                    print(Errs.E207.format(var, CST.ALL, time))  # All rows are empty
+                    lg.error(Errs.E207.format(var, CST.ALL, time))  # All rows are empty
 
             dict_intervals[var] = this_var_dict_intervals
             dict_standard_values[var] = this_var_dict_standard_values
             dict_outliers[var] = this_var_dict_outliers
+            lg.info('variable {} done.'.format(var).ljust(20, '-'))
         if plot_pairs:
 
             for x_var in self.Independent_var:
@@ -679,7 +708,7 @@ class Copatrec:
                                               method,
                                               plot_outliers_name)
                     else:
-                        print(Errs.E206.format(x=x_var, y=self.Dependent_var, c='"ALL"', t=time))
+                        lg.warning(Errs.E206.format(x=x_var, y=self.Dependent_var, c='"ALL"', t=time))
 
         return dict_intervals, dict_outliers
 
@@ -742,8 +771,8 @@ class Copatrec:
         in panel data sets are unbalanced data. 
 
         """
-        print(Warns.P101.format(method).center(40, '*'))
-        print(Warns.W101)
+        lg.info(Warns.P101.format(CST.Panel, method).center(60, '*'))
+        lg.warning(Warns.W101)
         dict_intervals = {}
         dict_standard_values = {}
         dict_outliers = {}
@@ -753,7 +782,7 @@ class Copatrec:
         list_category_names = grouped_data_by_category_col[
             self.Dependent_var].describe().index.values  # getting all category names
         for var in [self.Dependent_var] + self.Independent_var:
-            print(var.ljust(10, '-'))
+            lg.info('variable {} started.'.format(var).ljust(20, '-'))
             this_var_data, _ = self.__calc_mean_std(
                 grouped_data_by_category_col[var])  # mean of categories are used to establish the intervals
 
@@ -787,7 +816,8 @@ class Copatrec:
                 dict_intervals[var] = (np.nan, np.nan)
                 dict_standard_values[var] = np.array([])
                 dict_outliers[var] = []
-                print(Errs.E207.format(var, CST.ALL, CST.ALL))  # All rows are empty
+                lg.error(Errs.E207.format(var, CST.ALL, CST.ALL))  # All rows are empty
+            lg.info('variable {} done.'.format(var).ljust(20, '-'))
         if plot_pairs:
             for x_var in self.Independent_var:
                 x_unique_values = list(set(pd.Series(dict_standard_values[x_var])))
@@ -804,7 +834,7 @@ class Copatrec:
                                           method,
                                           plot_outliers_name)
                 else:
-                    print(Errs.E206.format(x=x_var, y=self.Dependent_var, c=CST.ALL, t=CST.ALL))
+                    lg.warning(Errs.E206.format(x=x_var, y=self.Dependent_var, c=CST.ALL, t=CST.ALL))
         return dict_intervals, dict_outliers
 
     def time_series(self,
@@ -866,8 +896,10 @@ class Copatrec:
                                                             plot_hists=False)
 
         for independent_var in self.Independent_var:
-            print("X: {}, Y: {}".format(self.Dependent_var,
-                                        independent_var).center(40, "="))
+            lg.info(
+                "X: {}, Y: {}".format(
+                    self.Dependent_var,
+                    independent_var).center(40, "="))
             # Selecting data for the current specific independent and dependent variable
             this_independent_dt = self.Data[[self.Time_col, self.Category_col,
                                              self.Dependent_var, independent_var]]
@@ -878,7 +910,7 @@ class Copatrec:
             # Init dict for saving categories' error terms
             cat_groups = this_independent_dt.groupby(self.Category_col)  # Grouping the data set based on categories
             for Cat, Cats_dt in cat_groups:
-                print(("Category:" + Cat).center(40, "-"))
+                lg.info(("Category:" + Cat).center(40, "-"))
                 if drop_outliers:
                     # If drop_outliers then select outliers for the current dependent variable
                     # and independent variable from the outliers' dictionary.
@@ -898,7 +930,7 @@ class Copatrec:
                 errs = dict()  # Dictionary of the errors to return further
                 if this_cat.shape[0] > 10:  # Do analysis if it is more than 10 rows
                     for func in self.Models:  # iterating over the function in the class
-                        print(func.__name__.center(40, "*"))  # Printing function name
+                        lg.info(func.__name__.center(40, "*"))  # Printing function name
                         try:
                             # Try to fit the data and receive the results
                             # popt stands for the coefficients
@@ -909,7 +941,7 @@ class Copatrec:
                                 standardization=standardization, outlier_method=outlier_method,
                                 outliers=outliers, intervals=intervals, epochs=max_epochs,
                                 alpha=alpha, time_series_category=Cat, cross_section_time=CST.ALL)
-                            print(Warns.R101)
+                            lg.info(Warns.R101)
                             results[func.__name__] = model_summary
                             errs[func.__name__] = None
                             if model_summary.SE < best_se:
@@ -922,10 +954,10 @@ class Copatrec:
                                                    show_outliers=show_outliers,
                                                    plot_predicted_outliers=plot_predicted_outliers)
                         except Exception as e:
-                            errs[func.__name__] = "{} in function {} \n {}".format(Errs.E101,
+                            errs[func.__name__] = "{} in function {} \n {}".format(type(e),
                                                                                    func.__name__,
                                                                                    str(e))
-                            print(errs[func.__name__])
+                            lg.error(errs[func.__name__])
                     cats_errs[Cat] = errs  # This can be done after the loop, but to increase the Readability
                     # In addition, in any case there would be "errs" dict, so, no need to put this in the try clause.
                     try:
@@ -937,18 +969,18 @@ class Copatrec:
                                 cat_best_func[Cat].plot(show_time_label=show_time_label,
                                                         show_outliers=show_outliers,
                                                         plot_predicted_outliers=plot_predicted_outliers)
-                            except UnboundLocalError:
-                                print(Errs.E202)
+                            except Exception as e:
+                                lg.error(str(type(e)) + Errs.E202)
 
                     except Exception as e:
-                        print(Errs.E201+"\n"+e)
+                        lg.error(Errs.E201+"\n"+e)
 
                 else:
                     errs = {func.__name__: Warns.W102 for func in self.Models}
                     # cats_results[Cat] = {}  # If no results, the cats_results would be empty itself
                     # So, no need to use that command. Readability purpose only
                     cats_errs[Cat] = errs  # If no results for the
-                    print(Warns.W102)
+                    lg.error(Warns.W102)
 
             opt_forms_dict[independent_var] = cat_best_func
             # cat_best_func[Cats]; because there is one cat_best_func per cat
@@ -1013,8 +1045,8 @@ class Copatrec:
                                                                 plot_pairs=False,
                                                                 plot_hists=False)
         for independent_var in self.Independent_var:
-            print("X: {}, Y: {}".format(self.Dependent_var,
-                                        independent_var).center(40, "="))
+            lg.info("X: {}, Y: {}".format(self.Dependent_var,
+                                          independent_var).center(40, "="))
             # Selecting data for the current specific independent and dependent variable
             this_independent_dt = self.Data[[self.Time_col,
                                              self.Category_col,
@@ -1027,7 +1059,7 @@ class Copatrec:
             # Init dict for saving times' error terms
             time_groups = this_independent_dt.groupby(self.Time_col)  # Grouping the data set based on times
             for time, time_dt in time_groups:
-                print(("Time:" + time).center(40, "-"))
+                lg.info(("Time:" + time).center(40, "-"))
                 if drop_outliers:
                     # If drop_outliers then select outliers for the current dependent variable
                     # and independent variable from the outliers' dictionary.
@@ -1047,7 +1079,7 @@ class Copatrec:
                 # related to the category
                 if this_time.shape[0] > 10:  # If N data is more than 10 do analysis
                     for func in self.Models:
-                        print(func.__name__.center(40, "*"))
+                        lg.info(func.__name__.center(40, "*"))
                         try:
                             # Try to fit the data and receive the results
                             # popt stands for the coefficients
@@ -1058,7 +1090,7 @@ class Copatrec:
                                 outliers=outliers, epochs=max_epochs, independent_var=independent_var,
                                 outlier_method=outlier_method,  intervals=intervals, alpha=alpha,
                                 cross_section_time=time, time_series_category=CST.ALL)
-                            print(Warns.R101)  # Log the fitted message
+                            lg.info(Warns.R101)  # Log the fitted message
                             results[func.__name__] = model_summary  # Save the model_summary
                             errs[func.__name__] = np.nan  # Since everything is ok, no error term.
                             if model_summary.SE < best_se:
@@ -1067,14 +1099,14 @@ class Copatrec:
                                 time_best_func[time] = model_summary
                             if plot and not plot_only_best:
                                 # IF it is asked to plot all equation forms for all time and independent variable
-                                self.model_summary(show_category_label=show_category_label,
+                                model_summary.plot(show_category_label=show_category_label,
                                                    show_outliers=show_outliers,
                                                    plot_predicted_outliers=plot_predicted_outliers)
                         except Exception as e:
                             errs[func.__name__] = "{} in function {} \n {}".format(Errs.E101,
                                                                                    func.__name__,
                                                                                    str(e))
-                            print(errs[func.__name__])
+                            lg.error(errs[func.__name__])
 
                     time_errs[time] = errs  # In any case, there would be "errs" dict, so no need to try except
                     try:
@@ -1085,18 +1117,18 @@ class Copatrec:
                             if not drop_outliers:
                                 show_outliers = False
                             try:
-                                self.time_best_func[time](show_category_label=show_category_label,
+                                time_best_func[time].plot(show_category_label=show_category_label,
                                                           show_outliers=show_outliers,
                                                           plot_predicted_outliers=plot_predicted_outliers)
                             except Exception as e:
-                                print(Errs.E202, "\n", e)
+                                lg.error(str(type(e)) + Errs.E202)
                     except Exception as e:
-                        print(Errs.E201 + "\n" + e)
+                        lg.error(Errs.E201 + "\n" + e)
                 else:
                     errs = {func.__name__: Warns.W102 for func in self.Models}
                     # time_results[time] = {}  # Since it is empty, and it inited as empty, then just for Readability
                     time_errs[time] = errs
-                    print(Warns.W102)
+                    lg.error(Warns.W102)
 
             all_forms_dict[independent_var] = time_results
             opt_forms_dict[independent_var] = time_best_func
@@ -1174,11 +1206,11 @@ class Copatrec:
                                                        outliers=current_outliers)
 
             print_txt = "X: " + self.Dependent_var + ", Y: " + independent_var
-            print(print_txt.center(40, "="))
+            lg.info(print_txt.center(40, "="))
             if this_independent_dt.shape[0] > 10:  # If there are enough data to do the analysis
                 best_se = np.inf
                 for func in self.Models:
-                    print(func.__name__.center(40, "*"))
+                    lg.info(func.__name__.center(40, "*"))
                     try:
                         # Try to fit the data and receive the results
                         # popt stands for the coefficients
@@ -1189,7 +1221,7 @@ class Copatrec:
                             drop_outliers=drop_outliers, outlier_method=outlier_method,
                             outliers=outliers, intervals=intervals, epochs=max_epochs, alpha=alpha,
                             cross_section_time=CST.ALL, time_series_category=CST.ALL)
-                        print(Warns.R101)
+                        lg.info(Warns.R101)
                         results[func.__name__] = model_summary
                         errs[func.__name__] = np.nan
                         if model_summary.SE < best_se:
@@ -1206,25 +1238,25 @@ class Copatrec:
                                                    show_outliers=show_outliers,
                                                    plot_predicted_outliers=plot_predicted_outliers)
                             except Exception as e:
-                                print(Errs.E202, "\n", e)
+                                lg.error(str(type(e)) + Errs.E202)
 
                     except Exception as e:
                         errs[func.__name__] = "{} in function {} \n {}".format(Errs.E101,
                                                                                func.__name__,
                                                                                str(e))
-                        print(errs[func.__name__])
+                        lg.error(errs[func.__name__])
 
                 error_terms[independent_var] = errs
                 try:
                     all_forms_dict[independent_var] = results
                 except Exception as e:
-                    print(Errs.E201 + "\n" + e)
+                    lg.error(Errs.E201 + "\n" + e)
             else:
                 errs = {func.__name__: Warns.W102 for func in self.Models}
                 # all_forms_dict[independent_var] = {}  # Since it is empty, and it inited as empty,
                 # then just for Readability
                 error_terms[independent_var] = errs
-                print(Warns.W102)
+                lg.error(Warns.W102)
 
         return opt_forms_dict, all_forms_dict, error_terms
 
@@ -1284,11 +1316,13 @@ class Copatrec:
                 # Time is index as the first multi index
                 x = x.drop(outliers, level=0, errors=Errs.Ignore)
                 y = y.drop(outliers, level=0, errors=Errs.Ignore)
+        # lg.captureWarnings(True)
 
         with warnings.catch_warnings():
-            # Don't show the warnings of curve_fitting
-            warnings.simplefilter("ignore")
+            warnings.simplefilter('ignore')
             popt, p_cov = curve_fit(func, x, y, maxfev=epochs)
+            # Don't show the warnings of curve_fitting
+
         # if we pass *popt to the function, since we have kept the order of coefficients properly there,
         # it will unpack and use them according to the order.
         y_hat = [func(xi, *popt) for xi in data[independent_var].values]
@@ -1332,7 +1366,7 @@ class Copatrec:
         d = data
         d = d.dropna()
         if d.empty:
-            print(Errs.E203)
+            lg.error(Errs.E203)
             return d
         else:
             d = d.reset_index(drop=True)
@@ -1351,7 +1385,7 @@ class Copatrec:
                 try:
                     d[col] = pd.to_numeric(d[col], errors='coerce')
                 except TypeError:
-                    print(Errs.E205)
+                    lg.error(Errs.E205)
                     return d
                 if standardization:
                     d[col] = MinMaxScaler().fit_transform(
@@ -1359,7 +1393,7 @@ class Copatrec:
                     #  To prevent data from catch in 0 errors in fitting process, an epsilon is added.
             d = d.dropna()
             if d.empty:
-                print(Errs.E203)
+                lg.error(Errs.E203)
                 return d
             else:
                 return d

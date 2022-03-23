@@ -76,6 +76,8 @@ class SumHelp:
 class Summary:
     """
     It could be possible to define the summary class as a Data Classes, but maybe later
+    Many things should be rearranged.
+    We also don't want to put all arguments in the object information
     """
     def __init__(self,
                  data: pd,
