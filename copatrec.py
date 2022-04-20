@@ -17,7 +17,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy.stats as sts
-# import seaborn as sbn
 from scipy.optimize import curve_fit
 from sklearn.preprocessing import MinMaxScaler
 
@@ -230,7 +229,6 @@ class Copatrec:
         norm_value = sts.norm.ppf(1-sl)
         lower = q1 - (norm_value * iqr)
         upper = q3 + (norm_value * iqr)
-        # TODO: Replace boxplot with histograms
         return lower, upper
 
     @staticmethod
@@ -426,18 +424,6 @@ class Copatrec:
             plt.title(title)
             plt.show()
 
-    # @staticmethod
-    # def __plot_iqr_box(data: np.array,
-    #                    outliers: list,
-    #                    title: str,
-    #                    plot_outliers_name: bool):
-    #     plt.figure(figsize=(10, 10))
-    #     sbn.boxplot(data)
-    #     if plot_outliers_name:
-    #         title = title + "\n "+CST.Outliers+":\n" + str(outliers)
-    #     plt.title(title)
-    #     plt.show()
-
     @staticmethod
     def __outlier_names(low_band,
                         upper_band,
@@ -606,14 +592,6 @@ class Copatrec:
                                              this_var_dict_outliers[cat],
                                              title,
                                              plot_outliers_name)
-
-                            # Box plot has 1.5 fixed number to calculate IQR thus, its results are different.
-                            # else:
-                            #     # Matplot has a box plot which is used if the method is IQR
-                            #     self.__plot_iqr_box(this_var_dict_standard_values[cat],
-                            #                         this_var_dict_outliers[cat],
-                            #                         title,
-                            #                         plot_outliers_name)
                 else:
                     this_var_dict_intervals[cat] = (np.nan, np.nan)
                     this_var_dict_standard_values[cat] = np.array([])
@@ -717,19 +695,11 @@ class Copatrec:
                                                           CST.Cross_Sectional,
                                                           time,
                                                           CST.ALL)
-                            # if method == CST.Beta_Method or method == CST.Normal_Method:
                             self.__plot_hist(this_var_dict_standard_values[time],
                                              this_var_dict_intervals[time],
                                              this_var_dict_outliers[time],
                                              title,
                                              plot_outliers_name)
-
-                            # Box plot has 1.5 fixed number to calculate IQR thus, its results are different.
-                            # else:
-                            #     self.__plot_iqr_box(this_var_dict_standard_values[time],
-                            #                         this_var_dict_outliers[time],
-                            #                         title,
-                            #                         plot_outliers_name)
                 else:
                     this_var_dict_intervals[time] = (np.nan, np.nan)
                     this_var_dict_standard_values[time] = np.array([])
@@ -837,11 +807,6 @@ class Copatrec:
                                      title,
                                      plot_outliers_name)
                     # Box plot has 1.5 fixed number to calculate IQR thus, its results are different.
-                    # else:
-                    #     self.__plot_iqr_box(dict_standard_values[var],
-                    #                         dict_outliers[var],
-                    #                         title,
-                    #                         plot_outliers_name)
             else:
                 dict_intervals[var] = (np.nan, np.nan)
                 dict_standard_values[var] = np.array([])
@@ -989,7 +954,8 @@ class Copatrec:
                                                                                    func.__name__,
                                                                                    str(e))
                             lg.error(errs[func.__name__])
-                    cats_errs[Cat] = errs  # This can be done after the loop, but to increase the Readability
+                    cats_errs[Cat] = errs
+                    # This can be done after the loop, but to increase the Readability
                     # In addition, in any case there would be "errs" dict, so, no need to put this in the try clause.
                     try:
                         cats_results[Cat] = results
