@@ -11,11 +11,10 @@ be ready in future)
 If the package is imported from GitHub, then it would be suggested
 to install following packages in your system using pip or any other 
 preferred approaches. 
-- warnings 
-- matplotlib 
-- numpy 
-- pandas 
-- scipy 
-- seaborn 
-- sklearn 
-- pickle
+- warnings : PSF 
+- matplotlib : PSF 
+- numpy :BSD 
+- pandas: BSD 
+- scipy: BSD 
+- sklearn: MIT
+- pickle: BSD

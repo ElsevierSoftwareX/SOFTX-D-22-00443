@@ -5,8 +5,8 @@ Created on Fri Sep  3 11:39:18 2021
 @author: Siamak Khatami
 @Email: siamak.khatami@ntnu.no
 @License: https://creativecommons.org/licenses/by-nc-sa/4.0/
-@Source: https://github.com/copatrec/copatrec
-@document: https://github.com/copatrec/copatrec
+@Source: https://github.com/copatrec
+@document: https://github.com/copatrec
 @Cite:
 """
 import numpy as np

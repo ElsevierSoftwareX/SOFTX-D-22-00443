@@ -5,8 +5,8 @@ Created on Fri Nov 19 12:16:08 2021
 @author: Siamak Khatami
 @Email: siamak.khatami@ntnu.no
 @License: https://creativecommons.org/licenses/by-nc-sa/4.0/
-@Source: https://github.com/copatrec/copatrec
-@document: https://github.com/copatrec/copatrec
+@Source: https://github.com/copatrec
+@document: https://github.com/copatrec
 @Cite:
 """
 import numpy as np
@@ -469,10 +469,12 @@ class Summary:
                      color='red')
         plt.xlabel(self.Independent_Var)
         plt.ylabel(self.Dependent_Var)
-        graph_title = (self.Func + " | SE:" +
-                       str(round(self.SE, 2)) + "\n" +
-                       self.Equation_Latex)
-
+        graph_title = "Regression type: {} | SE: {}\n" \
+                      "{}: {}"
+        graph_title = graph_title.format(self.Reg_Type,
+                                         round(self.SE, 2),
+                                         self.Func,
+                                         self.Equation_Latex)
         if self.Reg_Type == CST.Panel:
             c_names_category = ()
             c_names_time = ()

@@ -4,8 +4,8 @@ Created on Wed Sep  1 12:03:18 2021
 @author: Siamak Khatami
 @Email: siamak.khatami@ntnu.no
 @License: https://creativecommons.org/licenses/by-nc-sa/4.0/
-@Source: https://github.com/copatrec/copatrec
-@document: https://github.com/copatrec/copatrec
+@Source: https://github.com/copatrec
+@document: https://github.com/copatrec
 @Cite:
 """
 import inspect
@@ -17,9 +17,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import scipy.stats as sts
-import seaborn as sbn
+# import seaborn as sbn
 from scipy.optimize import curve_fit
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.preprocessing import MinMaxScaler
 
 try:
     from patterns import _EquFuncs, _EquPatterns
@@ -38,7 +38,7 @@ class Copatrec:
                  time_col: str = "",
                  category_col: str = "",
                  report: bool = True,
-                 report_to_file: bool = True
+                 report_to_file: bool = False
                  ):
         """
         COPATREC initializer function
@@ -212,6 +212,12 @@ class Copatrec:
         based on the received parameters. Since the standard deviation of
         the real population is unknown, a two side T-distribution is used to find the
         intervals;
+        In this function, instead of having scipy function, a more dynamic approach is used.
+        The IQR function in Matplot, seaborn and scipy use 1.5 * IQR point. The number 1.5 in that
+        formula is the result of normal ppf based on the confidence level (1 - sl) where sl is
+        approximate 5%.
+        To make it better, instead of using 1.5, ppf is used. Thus, it is not recommended comparing this
+        IQR with box_plots
         :param sl: Significant level
         :type: float
         :param values: data in a numpy array format
@@ -224,12 +230,44 @@ class Copatrec:
         norm_value = sts.norm.ppf(1-sl)
         lower = q1 - (norm_value * iqr)
         upper = q3 + (norm_value * iqr)
+        # TODO: Replace boxplot with histograms
         return lower, upper
+
+    @staticmethod
+    def __minmax_scaler(values: pd.Series) -> pd.Series:
+        """
+        This function receives a series and standardize them based on Min and Max points
+        :param values: input Pd.Series
+        :return: Standardized Series
+        """
+        try:
+            max_v = max(values)
+            min_v = min(values)
+            values = (values - min_v) / (max_v - min_v)
+        except Exception as e:
+            lg.error(e)
+        return values
+
+    @staticmethod
+    def __normal_scaler(values: pd.Series) -> pd.Series:
+        """
+        This function receives a series and standardize them based on mean and std
+        :param values: input Pd.Series
+        :return: Standardized Series
+        """
+        try:
+            values_stats = values.describe()  # Statistical attributed of the data
+            mean = values_stats['mean']
+            std = values_stats['std']
+            values = (values - mean) / std
+        except Exception as e:
+            lg.error(e)
+        return values
 
     def __beta_intervals(self,
                          values: pd.DataFrame or pd.Series,
                          sl: float) -> \
-            (float, float, np.array):
+            (float, float, pd.Series):
         """
         This function calculates the intervals of a sample using beta distribution
         and returns intervals (lower band, upper band) as well as standardized data using MaxMin scaler.\n
@@ -242,13 +280,13 @@ class Copatrec:
             upper band: The upper band of the calculated intervals |
             scaled values: The scaled values based on the MaxMin scaler
         """
-        if type(values).__name__ == CST.DataType_Series:
-            values = values.values  # Some functions can't operate on series \
-            # So it is needed to be used as numpy array
-        values = values.reshape(-1, 1)  # MinMaxScaler accepts 1d data shape.
-        values = MinMaxScaler().fit_transform(values) + 1e-5
+        # if type(values).__name__ == CST.DataType_Series:
+        #     values = values.values  # Some functions can't operate on series \
+        #     # So it is needed to be used as numpy array
+        # values = values.reshape(-1, 1)  # MinMaxScaler accepts 1d data shape.
+        values = self.__minmax_scaler(values)
         # Adding an epsilon to prevent having zero
-        values = values.reshape(-1,)  # Flatting data
+        # values = values.reshape(-1,)  # Flatting data
         values_means, values_std = self.__calc_mean_std(pd.Series(values))
         values_alpha, values_beta = self.__alpha_beta(values_means,
                                                       values_std)
@@ -258,9 +296,9 @@ class Copatrec:
         return var_low, var_up, values
 
     def __normal_intervals(self,
-                           values: pd.DataFrame or pd.Series,
+                           values: pd,
                            sl: float) -> \
-            (float, float, np.array):
+            (float, float, pd.Series):
         """
         This function calculates the intervals of a sample using Normal distribution\n
         :param values: Receives the sample values
@@ -271,22 +309,22 @@ class Copatrec:
             scaled values: The scaled values based on the MaxMin scaler
         """
 
-        if type(values).__name__ == CST.DataType_Series:
-            values = values.values  # Some functions can't operate on series \
-            # So it is needed to be used as numpy array
-        values = values.reshape(-1, 1)  # StandardScaler accepts 1d data shape.
-        values = StandardScaler().fit_transform(values) + 1e-5
+        # if type(values).__name__ == CST.DataType_Series:
+        #     values = values.values  # Some functions can't operate on series \
+        #     # So it is needed to be used as numpy array
+        # values = values.reshape(-1, 1)  # StandardScaler accepts 1d data shape.
+        # values = StandardScaler().fit_transform(values) + 1e-5
         # Adding an epsilon to prevent having zero
-        values = values.reshape(-1,)  # Flatting data
+        # values = values.reshape(-1,)  # Flatting data
+        values = self.__normal_scaler(values)
         values_stats = pd.Series(values).describe()  # Statistical attributed of the data
         var_low, var_up = self.__normal_upper_lower(sl, values_stats)
-
         return var_low, var_up, values
 
     def __iqr_intervals(self,
-                        values: pd.DataFrame or pd.Series,
+                        values: pd,
                         sl: float) -> \
-            (float, float, np.array):
+            (float, float, pd.Series):
         """
         This function calculates the intervals of a sample using Normal distribution\n
         :param values: Receives the sample values
@@ -297,18 +335,19 @@ class Copatrec:
             scaled values: The scaled values based on the Normal standardization |
         """
 
-        if type(values).__name__ == CST.DataType_Series:
-            values = values.values  # Some functions can't operate on series \
-            # So it is needed to be used as numpy array
-        values = values.reshape(-1, 1)  # StandardScaler accepts 1d data shape.
-        values = StandardScaler().fit_transform(values) + 1e-5
+        # if type(values).__name__ == CST.DataType_Series:
+        #     values = values.values  # Some functions can't operate on series \
+        #     # So it is needed to be used as numpy array
+        # values = values.reshape(-1, 1)  # StandardScaler accepts 1d data shape.
+        # values = StandardScaler().fit_transform(values) + 1e-5
         # Adding an epsilon to prevent having zero
-        values = values.reshape(-1,)  # Flatting data
+        # values = values.reshape(-1,)  # Flatting data
+        values = self.__normal_scaler(values)
         var_low, var_up = self.__iqr_upper_lower(sl, values)
         return var_low, var_up, values
 
     def __plot_intervals(self,
-                         category_names: list,
+                         analysis_type: str,
                          x_var_name: str,
                          x_values: np.array,
                          x_intervals: (float, float),
@@ -316,10 +355,10 @@ class Copatrec:
                          y_intervals: (float, float),
                          sl: float,
                          method: str,
-                         plot_outliers_name: bool):
+                         plot_names: bool):
         """
         Plots intervals in pair mode (x= independent variable, y = dependent variable)\n
-        :param category_names: The name of categories in the data
+        :param analysis_type: Panel, Time_series or Cross_sectional
         :param x_var_name: Independent variable name
         :param x_values: Independent variable values
         :param x_intervals: Independent variable intervals
@@ -330,29 +369,35 @@ class Copatrec:
         y_lower_band, y_upper_band = y_intervals
         x_lower_band, x_upper_band = x_intervals
         plt.figure(figsize=(15, 15))
-        if plot_outliers_name:
-            for i, c in enumerate(category_names):
-                # Preparing annotation of the plot to show
-                # related data points information.
-                plt.annotate(c,
-                             (x_values[i], y_values[i]),
+        if plot_names:
+            for i, c in pd.concat([x_values, y_values], axis=1).iterrows():
+                plt.annotate(i,
+                             (c[0], c[1]),
                              color='gray')
+            # for i, c in enumerate(category_names):
+            #     # Preparing annotation of the plot to show
+            #     # related data points information.
+            #     plt.annotate(c,
+            #                  (x_values[i], y_values[i]),
+            #                  color='gray')
         plt.scatter(x_values, y_values)
         plt.ylabel(self.Dependent_var)
         plt.xlabel(x_var_name)
         [plt.axhline(y, c='r') for y in [y_lower_band, y_upper_band]]
         # Adding up intervals on the plot
         [plt.axvline(x, c='r') for x in [x_lower_band, x_upper_band]]
-        title = "Dataset outlier analysis based on {method}\n" \
-                "Borders contain {alpha:.3f} of the data."
+        title = CST.Pair_interval_title
         if method == CST.Beta_Method:
             title = title.format(method='Beta distribution',
+                                 analysis_type=analysis_type,
                                  alpha=1 - sl)
         elif method == CST.Normal_Method:
             title = title.format(method='Normal distribution',
+                                 analysis_type=analysis_type,
                                  alpha=1 - sl)
         elif method == CST.IQR_Method:
             title = title.format(method="Inter Quartile Range method",
+                                 analysis_type=analysis_type,
                                  alpha=1 - sl)
         plt.title(title)
         plt.show()
@@ -381,17 +426,17 @@ class Copatrec:
             plt.title(title)
             plt.show()
 
-    @staticmethod
-    def __plot_iqr_box(data: np.array,
-                       outliers: list,
-                       title: str,
-                       plot_outliers_name: bool):
-        plt.figure(figsize=(10, 10))
-        sbn.boxplot(data)
-        if plot_outliers_name:
-            title = title + "\n "+CST.Outliers+":\n" + str(outliers)
-        plt.title(title)
-        plt.show()
+    # @staticmethod
+    # def __plot_iqr_box(data: np.array,
+    #                    outliers: list,
+    #                    title: str,
+    #                    plot_outliers_name: bool):
+    #     plt.figure(figsize=(10, 10))
+    #     sbn.boxplot(data)
+    #     if plot_outliers_name:
+    #         title = title + "\n "+CST.Outliers+":\n" + str(outliers)
+    #     plt.title(title)
+    #     plt.show()
 
     @staticmethod
     def __outlier_names(low_band,
@@ -429,7 +474,7 @@ class Copatrec:
                           values: pd.Series,
                           sl: float,
                           names: list) -> \
-            (float, float, np.array, list, str):
+            (float, float, pd.Series, list, str):
 
         """
         This function calculates lower band, upper band, standard values and outliers;
@@ -450,6 +495,7 @@ class Copatrec:
         """
 
         error_term = ""
+        lower_band, upper_band, var_standard, outliers = (0, 0, values, [[], []])
         if method == CST.Beta_Method:
             try:
                 lower_band, upper_band, var_standard = self.__beta_intervals(values,
@@ -459,9 +505,7 @@ class Copatrec:
                                                 var_standard,
                                                 names)
             except Exception as e:
-                lower_band, upper_band, var_standard, outliers = (0, 0, values, [[], []])
                 error_term = Errs.E208.format(CST.Beta_Method, e)
-            return lower_band, upper_band, var_standard, outliers, error_term
 
         elif method == CST.Normal_Method:
             try:
@@ -472,9 +516,7 @@ class Copatrec:
                                                 var_standard,
                                                 names)
             except Exception as e:
-                lower_band, upper_band, var_standard, outliers = (0, 0, values, [[], []])
                 error_term = Errs.E208.format(CST.Normal_Method, e)
-            return lower_band, upper_band, var_standard, outliers, error_term
         elif method == CST.IQR_Method:
             try:
                 lower_band, upper_band, var_standard = self.__iqr_intervals(
@@ -484,9 +526,8 @@ class Copatrec:
                                                 var_standard,
                                                 names)
             except Exception as e:
-                lower_band, upper_band, var_standard, outliers = (0, 0, values, [[], []])
                 error_term = Errs.E208.format(CST.IQR_Method, e)
-            return lower_band, upper_band, var_standard, outliers, error_term
+        return lower_band, upper_band, var_standard, outliers, error_term
 
     def time_series_outliers(self,
                              sl: float = 0.005,
@@ -552,22 +593,27 @@ class Copatrec:
                         lg.error(error_term)
                     else:
                         if plot_hists:
-                            title = CST.Hist_title.format(var, method, CST.ALL, cat)
+                            title = CST.Hist_title.format(var,
+                                                          method,
+                                                          CST.Time_Series,
+                                                          CST.ALL,
+                                                          cat)
                             # Preparing title for the histogram
-                            if method == CST.Beta_Method or method == CST.Normal_Method:
-                                # Matplot has a box plot which is used if the method is IQR
-                                self.__plot_hist(this_var_dict_standard_values[cat],
-                                                 this_var_dict_intervals[cat],
-                                                 this_var_dict_outliers[cat],
-                                                 title,
-                                                 plot_outliers_name)
+                            # if method == CST.Beta_Method or method == CST.Normal_Method:
+                            # Matplot has a box plot which is used if the method is IQR# Not anymore
+                            self.__plot_hist(this_var_dict_standard_values[cat],
+                                             this_var_dict_intervals[cat],
+                                             this_var_dict_outliers[cat],
+                                             title,
+                                             plot_outliers_name)
 
-                            else:
-                                # Matplot has a box plot which is used if the method is IQR
-                                self.__plot_iqr_box(this_var_dict_standard_values[cat],
-                                                    this_var_dict_outliers[cat],
-                                                    title,
-                                                    plot_outliers_name)
+                            # Box plot has 1.5 fixed number to calculate IQR thus, its results are different.
+                            # else:
+                            #     # Matplot has a box plot which is used if the method is IQR
+                            #     self.__plot_iqr_box(this_var_dict_standard_values[cat],
+                            #                         this_var_dict_outliers[cat],
+                            #                         title,
+                            #                         plot_outliers_name)
                 else:
                     this_var_dict_intervals[cat] = (np.nan, np.nan)
                     this_var_dict_standard_values[cat] = np.array([])
@@ -589,8 +635,8 @@ class Copatrec:
                     if (not (x_unique_values == [0] or x_unique_values == [])) and \
                             (not (y_unique_values == [0] or y_unique_values == [])):
                         # To check if values are not a list of zeros or nan values
-                        this_time_category_names = cat_dt[self.Time_col].values
-                        self.__plot_intervals(this_time_category_names,
+                        # this_time_category_names = cat_dt[self.Time_col].values
+                        self.__plot_intervals(CST.Time_Series,
                                               x_var,
                                               dict_standard_values[x_var][cat],
                                               dict_intervals[x_var][cat],
@@ -601,7 +647,7 @@ class Copatrec:
                                               plot_outliers_name)
                     else:
                         lg.warning(Errs.E206.format(x=x_var, y=self.Dependent_var, c=cat, t=CST.ALL))
-
+        lg.info(Warns.P102.center(40, '*'))
         return dict_intervals, dict_outliers
 
     def cross_sectional_outliers(self,
@@ -666,19 +712,24 @@ class Copatrec:
                         lg.error(error_term)
                     else:
                         if plot_hists:
-                            title = CST.Hist_title.format(var, method, time, CST.ALL)
-                            if method == CST.Beta_Method or method == CST.Normal_Method:
-                                self.__plot_hist(this_var_dict_standard_values[time],
-                                                 this_var_dict_intervals[time],
-                                                 this_var_dict_outliers[time],
-                                                 title,
-                                                 plot_outliers_name)
+                            title = CST.Hist_title.format(var,
+                                                          method,
+                                                          CST.Cross_Sectional,
+                                                          time,
+                                                          CST.ALL)
+                            # if method == CST.Beta_Method or method == CST.Normal_Method:
+                            self.__plot_hist(this_var_dict_standard_values[time],
+                                             this_var_dict_intervals[time],
+                                             this_var_dict_outliers[time],
+                                             title,
+                                             plot_outliers_name)
 
-                            else:
-                                self.__plot_iqr_box(this_var_dict_standard_values[time],
-                                                    this_var_dict_outliers[time],
-                                                    title,
-                                                    plot_outliers_name)
+                            # Box plot has 1.5 fixed number to calculate IQR thus, its results are different.
+                            # else:
+                            #     self.__plot_iqr_box(this_var_dict_standard_values[time],
+                            #                         this_var_dict_outliers[time],
+                            #                         title,
+                            #                         plot_outliers_name)
                 else:
                     this_var_dict_intervals[time] = (np.nan, np.nan)
                     this_var_dict_standard_values[time] = np.array([])
@@ -693,12 +744,12 @@ class Copatrec:
 
             for x_var in self.Independent_var:
                 for time, time_dt in grouped_data_by_time_col:
-                    this_time_category_names = time_dt[self.Category_col].values
+                    #  this_time_category_names = time_dt[self.Category_col].values  # Can be accessed form index
                     x_unique_values = list(set(pd.Series(dict_standard_values[x_var][time])))
                     y_unique_values = list(set(pd.Series(dict_standard_values[self.Dependent_var][time])))
                     if (not (x_unique_values == [0] or x_unique_values == [])) and \
                             (not (y_unique_values == [0] or y_unique_values == [])):
-                        self.__plot_intervals(this_time_category_names,
+                        self.__plot_intervals(CST.Cross_Sectional,
                                               x_var,
                                               dict_standard_values[x_var][time],
                                               dict_intervals[x_var][time],
@@ -709,7 +760,7 @@ class Copatrec:
                                               plot_outliers_name)
                     else:
                         lg.warning(Errs.E206.format(x=x_var, y=self.Dependent_var, c='"ALL"', t=time))
-
+        lg.info(Warns.P102.center(40, '*'))
         return dict_intervals, dict_outliers
 
     def panel_outliers(self,
@@ -745,32 +796,6 @@ class Copatrec:
         intervals[variable name] |  outliers[variable name]
         """
 
-        """
-        Detecting outliers is one of the data-cleaning steps and data cleaning step itself is
-        one of the data pre-processing steps.
-        When ever it is about distribution of a variable in the population,
-        mostly a normal distribution is used for analysis. However, this
-        function is using Beta distribution to draw confidence intervals by 
-        default but other two options like Normal distribution and IQR are available. The
-        reason is the unknown distribution of the population. Beta distribution
-        can simulate any kind of distribution based on the mean and sigma of the
-        samples, like normal distribution. They both keep the distribution shape
-        after standardization, however, it is not guaranteed that the population
-        or even the gathered sample have been normally distribution.
-        Applying normal standardization (normalization) to any kind of data and
-        only relying on assumption can lead the analysis to a wrong way.
-        Because, Z-score and T-scores have a symmetric bell shape without any
-        skewness thus, their confidence intervals do not care the accumulation
-        of most of the data into specific point. Figure \ref{} describes the
-        differences between standardized intervals based on the normal distribution
-        \ref{a} and standardized intervals based on the beta distribution. As it
-        is clear, it shows more realistic intervals to include or exclude data
-        outliers.
-        
-        The reason to use mean of the categories' points instead of the all data is typically 
-        in panel data sets are unbalanced data. 
-
-        """
         lg.info(Warns.P101.format(CST.Panel, method).center(60, '*'))
         lg.warning(Warns.W101)
         dict_intervals = {}
@@ -800,18 +825,23 @@ class Copatrec:
                 dict_outliers[var] = outliers
 
                 if plot_hists:
-                    title = CST.Hist_title.format(var, method, CST.ALL, CST.ALL)
-                    if method == CST.Beta_Method or method == CST.Normal_Method:
-                        self.__plot_hist(dict_standard_values[var],
-                                         dict_intervals[var],
-                                         dict_outliers[var],
-                                         title,
-                                         plot_outliers_name)
-                    else:
-                        self.__plot_iqr_box(dict_standard_values[var],
-                                            dict_outliers[var],
-                                            title,
-                                            plot_outliers_name)
+                    title = CST.Hist_title.format(var,
+                                                  method,
+                                                  CST.Panel,
+                                                  CST.ALL,
+                                                  CST.ALL)
+                    # if method == CST.Beta_Method or method == CST.Normal_Method:
+                    self.__plot_hist(dict_standard_values[var],
+                                     dict_intervals[var],
+                                     dict_outliers[var],
+                                     title,
+                                     plot_outliers_name)
+                    # Box plot has 1.5 fixed number to calculate IQR thus, its results are different.
+                    # else:
+                    #     self.__plot_iqr_box(dict_standard_values[var],
+                    #                         dict_outliers[var],
+                    #                         title,
+                    #                         plot_outliers_name)
             else:
                 dict_intervals[var] = (np.nan, np.nan)
                 dict_standard_values[var] = np.array([])
@@ -824,7 +854,7 @@ class Copatrec:
                 y_unique_values = list(set(pd.Series(dict_standard_values[self.Dependent_var])))
                 if (not (x_unique_values == [0] or x_unique_values == [])) and \
                         (not (y_unique_values == [0] or y_unique_values == [])):
-                    self.__plot_intervals(list_category_names,
+                    self.__plot_intervals(CST.Panel,
                                           x_var,
                                           dict_standard_values[x_var],
                                           dict_intervals[x_var],
@@ -835,6 +865,7 @@ class Copatrec:
                                           plot_outliers_name)
                 else:
                     lg.warning(Errs.E206.format(x=x_var, y=self.Dependent_var, c=CST.ALL, t=CST.ALL))
+        lg.info(Warns.P102.center(40, '*'))
         return dict_intervals, dict_outliers
 
     def time_series(self,
@@ -941,7 +972,7 @@ class Copatrec:
                                 standardization=standardization, outlier_method=outlier_method,
                                 outliers=outliers, intervals=intervals, epochs=max_epochs,
                                 alpha=alpha, time_series_category=Cat, cross_section_time=CST.ALL)
-                            lg.info(Warns.R101)
+                            lg.info(Warns.R101.format(model_summary.SE))
                             results[func.__name__] = model_summary
                             errs[func.__name__] = None
                             if model_summary.SE < best_se:
@@ -1090,7 +1121,7 @@ class Copatrec:
                                 outliers=outliers, epochs=max_epochs, independent_var=independent_var,
                                 outlier_method=outlier_method,  intervals=intervals, alpha=alpha,
                                 cross_section_time=time, time_series_category=CST.ALL)
-                            lg.info(Warns.R101)  # Log the fitted message
+                            lg.info(Warns.R101.format(model_summary.SE))  # Log the fitted message
                             results[func.__name__] = model_summary  # Save the model_summary
                             errs[func.__name__] = np.nan  # Since everything is ok, no error term.
                             if model_summary.SE < best_se:
@@ -1221,7 +1252,7 @@ class Copatrec:
                             drop_outliers=drop_outliers, outlier_method=outlier_method,
                             outliers=outliers, intervals=intervals, epochs=max_epochs, alpha=alpha,
                             cross_section_time=CST.ALL, time_series_category=CST.ALL)
-                        lg.info(Warns.R101)
+                        lg.info(Warns.R101.format(model_summary.SE))
                         results[func.__name__] = model_summary
                         errs[func.__name__] = np.nan
                         if model_summary.SE < best_se:
@@ -1327,6 +1358,9 @@ class Copatrec:
         # it will unpack and use them according to the order.
         y_hat = [func(xi, *popt) for xi in data[independent_var].values]
         data[independent_var + func.__name__] = y_hat
+        # if reg_type == CST.Time_Series:
+        #     data = data.sort_values(self.Time_col)
+        # else:
         data = data.sort_values(by=independent_var)
         # Create the Summary object
         model_summary = Summary(data=data, coefficients=popt,

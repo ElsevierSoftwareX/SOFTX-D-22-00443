@@ -3,8 +3,8 @@ Created on Fri Nov 19 12:16:08 2021
 @author: Siamak Khatami
 @Email: siamak.khatami@ntnu.no
 @License: https://creativecommons.org/licenses/by-nc-sa/4.0/
-@Source: https://github.com/copatrec/copatrec
-@document: https://github.com/copatrec/copatrec
+@Source: https://github.com/copatrec
+@document: https://github.com/copatrec
 @Cite:
 """
 
@@ -25,7 +25,11 @@ class CST:
     Outliers = 'outliers'
 
     #  Plots
-    Hist_title = "Variable: {} | Method: {} \n Time: {} | Category: {}"
+    Hist_title = "Variable: {} | Method: {} \n " \
+                 "Analysis Type:{} | Time: {} | Category: {}"
+    Pair_interval_title = "Outlier analysis based on {method}\n" \
+                          "{analysis_type} analysis | " \
+                          "Borders contain {alpha:.3f} of the data."
 
     #  General Strings
     ALL = 'ALL'
@@ -43,41 +47,37 @@ class Warns:
     W101 = "It is highly recommended to drop outliers by an expert of the field."
     W102 = "Analysis error: The number of observations are less than 10."
     #  Result Messages
-    R101 = "Fitted"
+    R101 = "Fitted. Model SE: {}"
     R102 = "Done"
 
     #  Progress
     P101 = "Finding outliers for a {} analysis, Method:{}"
+    P102 = "Outliers processed."
 
     #  Equation Forms
     EF101 = 'Warning: Here xb equation Represents tanh.'
 
     # Summary object warnings
-    S100 = 'Copatrec aims to analyze complex behaviors.' \
-           ' Complex functions can generate their unique curve or create a' \
-           ' snapshot of a specific range. Thus, it would be beneficial' \
-           'to compare the curve with the already known complex behaviors.' \
-           ' For example, the logistic function is representative of' \
-           ' S-shaped behavior. However, all other tasks like oscillator or' \
-           ' sine can generate S-shape behavior in a specific range. So, ' \
-           'while the generated function can be used for predictions' \
-           '(so sensitive and dependent to the case), for interpretation' \
-           ' of behavior, an expert should be involved.'
-    S101 = 'Standard error of regression can be used' \
-           ' to evaluate both linear and nonlinear regressions' \
-           ' and is valid if it is less than desired' \
-           ' significance level. This is the main evaluation' \
-           ' criteria for best fitted models.'
+    S100 = 'Copatrec aims to analyze complex behaviors. Complex functions' \
+           ' can generate their unique curve or create a snapshot of a specific' \
+           ' range. Thus, it would be beneficial to compare the curve with the' \
+           ' already known complex behaviors. For example, the logistic function' \
+           ' is representative of S-shaped behavior. However, all other tasks like' \
+           ' oscillator or sine can generate S-shape behavior in a specific range.' \
+           ' So, while the equation can be used for predictions(so sensitive and' \
+           ' dependent on the case), an expert should be involved in interpreting' \
+           ' behavior. '
+    S101 = 'Standard error of regression can be used to evaluate' \
+           ' linear and nonlinear regressions and is valid if it is less' \
+           ' than the desired significance level. SE is the primary evaluation' \
+           ' criteria for best-fitted models.'
 
-    S102 = 'The normal test is using Skewness and ' \
-           'kurtosis to evaluate whether estimation ' \
-           'errors are distributed normally around zero or ' \
-           'not. "Error Normal Test" is using p-value ' \
-           'which means it should interpreted as "There ' \
-           'are(not) enough evidence to claim errors are ' \
-           'normally distributed" and should not used ' \
-           'alone to accept or reject the functionality ' \
-           'of a model.'
+    S102 = 'The Normal test uses Skewness and kurtosis to evaluate' \
+           ' whether estimation errors are distributed Normally around' \
+           ' zero. "Error Normal Test" uses using p-value, which means' \
+           '  "There is (not) enough evidence to claim errors are normally' \
+           ' distributed" and should not be used alone to accept or reject' \
+           ' the functionality of a model. '
 
 
 class Errs:
