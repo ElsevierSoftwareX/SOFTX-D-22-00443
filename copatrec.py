@@ -921,6 +921,7 @@ class Copatrec:
                                                 drop_outliers=drop_outliers,
                                                 outliers=current_outliers)
 
+                this_cat = this_cat.sort_index(level=[self.Time_col])
                 best_se = np.inf  # Any SE less than current should be replaced
                 results = dict()  # A dict to store summary_objects in the results.
                 errs = dict()  # Dictionary of the errors to return further
@@ -1394,6 +1395,4 @@ class Copatrec:
             d = d.dropna()
             if d.empty:
                 lg.error(Errs.E203)
-                return d
-            else:
-                return d
+            return d

@@ -169,7 +169,7 @@ class Summary:
         # Mean of Squares for Error
         self.MSE = self.SSE / self.Deg_Free
         self.R_MSE = np.sqrt(self.MSE)
-        self.SE = np.round(np.sqrt(self.SSE/self.Deg_Free), 2)
+        self.SE = np.round(np.sqrt(self.SSE/self.Deg_Free), 3)
 
         # Shapiro test is not good for the big datasets, because the nature of 
         # p_value is to imply that data is not sufficient to prove the distribution.
@@ -428,7 +428,6 @@ class Summary:
              show_category_label: bool = False,
              show_outliers: bool = False,
              plot_predicted_outliers: bool = False):
-
         """
         This function plots the result of analysis using the summary object;
         :param show_time_label: Weather to show the labels of the times on the plot
@@ -446,6 +445,7 @@ class Summary:
             plt.yticks(np.arange(0, 1, 0.05))
 
         dt = self.Data
+        print(dt)
         if show_outliers:
             fitted_data = dt[dt.index.get_level_values(CST.Outliers).isin([False])]
             outliers_data = dt[dt.index.get_level_values(CST.Outliers).isin([True])]
@@ -472,7 +472,7 @@ class Summary:
         graph_title = "Regression type: {} | SE: {}\n" \
                       "{}: {}"
         graph_title = graph_title.format(self.Reg_Type,
-                                         round(self.SE, 2),
+                                         round(self.SE, 3),
                                          self.Func,
                                          self.Equation_Latex)
         if self.Reg_Type == CST.Panel:

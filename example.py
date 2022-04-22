@@ -14,53 +14,28 @@ try:
 except ImportError:
     from .copatrec import Copatrec
 import pandas as pd
-import numpy as np
-from sys import exit
 import pickle
 data = pd.read_pickle("./Data/Data.pkl")
 data = data[['year', 'countryname', 'gdppc', 'Government Integrity']]
-#data = pd.read_csv("./Data/Project_Data.csv")
 time_Col = 'year'
 category_column = 'countryname'
 data.columns
 Dep_Var = 'gdppc'
-# data = data[data[category_column].isin(
-#     np.random.choice(data[category_column].values,10)
-# )]
-# Todo: drop logarithmic points in undefined areas like minus.
-SM = Copatrec(data, Dep_Var, time_Col, category_column, True, True)
+SM = Copatrec(data, Dep_Var, time_Col, category_column, True, False)
 
 
-#Apply Panel regression to all data per category
-Opt_Forms_Dict, All_Forms_Dict, Error_Terms = SM.panel(max_epochs=8000,
-                                                       alpha=0.05,
-                                                       standardization=True,
-                                                       plot=True,
-                                                       show_time_label=False,
-                                                       show_category_label=False,
-                                                       drop_outliers=True,
-                                                       show_outliers=True,
-                                                       plot_predicted_outliers=True,
-                                                       outlier_method='beta')
 
-Opt_Forms_Dict['Government Integrity'].report()
-exit()
 intervals, outliers = SM.panel_outliers(method='beta', plot_pairs = True, plot_hists = True, plot_outliers_name=True)
 intervals, outliers = SM.panel_outliers(method='normal', plot_pairs = True, plot_hists = True, plot_outliers_name=True)
 intervals, outliers = SM.panel_outliers(method='IQR', plot_pairs = True, plot_hists = True, plot_outliers_name=True)
-
 
 
 intervals, outliers = SM.cross_sectional_outliers(sl=0.05, method='beta', plot_pairs=True, plot_hists=True, plot_outliers_name=True)
 intervals, outliers = SM.time_series_outliers(sl=0.05, method='beta', plot_pairs=True, plot_hists = True, plot_outliers_name=True)
 intervals, outliers = SM.cross_sectional_outliers(sl=0.05, method='normal', plot_pairs=True, plot_hists=True, plot_outliers_name=True)
 intervals, outliers = SM.time_series_outliers(sl=0.05, method='normal', plot_pairs=True, plot_hists = True, plot_outliers_name=True)
-
-
 intervals, outliers = SM.cross_sectional_outliers(sl=0.05, method='IQR', plot_pairs=True, plot_hists=True, plot_outliers_name=True)
 intervals, outliers = SM.time_series_outliers(sl=0.05, method='IQR', plot_pairs=True, plot_hists = True, plot_outliers_name=True)
-
-exit()
 
 Opt_Forms_Dict, All_Forms_Dict, Error_Terms = SM.panel(max_epochs=8000,
                                                        alpha=0.05,
@@ -89,12 +64,20 @@ Opt_Forms_Dict, All_Forms_Dict, Error_Terms = SM.time_series(max_epochs=8000,
                                                              drop_outliers=True,
                                                              show_outliers=True,
                                                              plot_predicted_outliers=True,
+                                                             show_time_label=True,
+                                                             outlier_method='beta',
+                                                             plot_only_best=True)
+
+Opt_Forms_Dict, All_Forms_Dict, Error_Terms = SM.time_series(max_epochs=8000,
+                                                             alpha=0.05,
+                                                             plot=True,
+                                                             drop_outliers=False,
+                                                             show_outliers=True,
+                                                             plot_predicted_outliers=True,
                                                              show_time_label=False,
                                                              outlier_method='beta',
                                                              plot_only_best=True)
 
-
-exit()
 
 intervals, outliers = SM.panel_outliers(method='beta', plot_pairs = False, plot_hists = False, plot_outliers_name=True)
 intervals, outliers = SM.cross_sectional_outliers(sl=0.05, method='beta', plot_pairs=False, plot_hists=False, plot_outliers_name=False)
@@ -166,7 +149,6 @@ Opt_Forms_Dict, All_Forms_Dict, Error_Terms = SM.cross_sectional(max_epochs=8000
 
 
 
-exit()
 All_Forms_Dict['Government Integrity']['sin'].save("test")
 All_Forms_Dict['Government Integrity']['sin'].summary_items()
 All_Forms_Dict['Government Integrity']['sin'].Data
@@ -176,5 +158,4 @@ All_Forms_Dict['Government Integrity']['sin'].help()
 
 file = open('test.pickle', 'rb')
 summ = pickle.load(file)
-
 summ.report()
