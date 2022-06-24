@@ -29,12 +29,14 @@ except ImportError:
     from .summary import Summary
     from .constants import CST, Warns, Errs
 
-#TODO: Standardization has a big effect on the SE of models. On the other hand
-#       sometimes it is needed to have unstandardized models, So, a rescale is 
-#       needed to avoid mathematical errors. However, this cause higher SE.
-#       One approach to solve this is to have Standardized model, but rescale
-#       predictions to the original ranges. Any changed in the Max number can 
-#       cause porblems.
+#       TODO: Standardization has a big effect on the SE of models. On the other hand
+#           sometimes it is needed to have models using their regular data form, So, a rescale is
+#           needed to avoid mathematical errors. However, this cause higher SE.
+#           One approach to solve this is to have Standardized model, but rescale
+#           predictions to the original ranges. Any changed in the Max number can
+#           cause problems.
+
+
 class Copatrec:
     def __init__(self,
                  data: pd.DataFrame,
@@ -452,8 +454,8 @@ class Copatrec:
     def __outlier_names_flattener(outliers):
         # TODO: Function description
         """
-        This function recieves two list of oultiers for lower and upper bands
-        and joints these lists toghether. 
+        This function receives two list of outliers for lower and upper bands
+        and joints these lists together.
         """
         outs = []
         for values in outliers:

@@ -3,11 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="33fed66d-d306-4cdb-a05e-4a0298d9e8f6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Document.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Document.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/copatrec.py" beforeDir="false" afterPath="$PROJECT_DIR$/copatrec.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example.log" beforeDir="false" afterPath="$PROJECT_DIR$/example.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example.py" beforeDir="false" afterPath="$PROJECT_DIR$/example.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/summary.py" beforeDir="false" afterPath="$PROJECT_DIR$/summary.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -120,6 +116,7 @@
       <workItem from="1650444263197" duration="2350000" />
       <workItem from="1650528465958" duration="2040000" />
       <workItem from="1650616165921" duration="5202000" />
+      <workItem from="1656062624118" duration="109000" />
     </task>
     <servers />
   </component>
