@@ -161,7 +161,7 @@ class Summary:
             par_cil = self.Coefficients - ebm
             self.Par_CI = np.array(list(zip(par_cil, par_ciu)))
         except ValueError:
-            print()
+            pass
 
         self.Errors = np.asarray(y_values) - np.asarray(y_hat_values)
         # Sum of Squares for Error/sum of squares for residuals
@@ -445,7 +445,6 @@ class Summary:
             plt.yticks(np.arange(0, 1, 0.05))
 
         dt = self.Data
-        print(dt)
         if show_outliers:
             fitted_data = dt[dt.index.get_level_values(CST.Outliers).isin([False])]
             outliers_data = dt[dt.index.get_level_values(CST.Outliers).isin([True])]
