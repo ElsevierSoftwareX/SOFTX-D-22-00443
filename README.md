@@ -18,3 +18,7 @@ preferred approaches.
 - scipy: BSD 
 - sklearn: MIT
 - pickle: BSD
+
+# Examples
+There are two files in different formats (.py and .ipynb). For a dipper tutorial of Copatrec, the Jupyter
+file (Document.ipynb) is recommended. 
