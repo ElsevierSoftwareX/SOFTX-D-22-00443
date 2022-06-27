@@ -448,7 +448,7 @@ class Summary:
             plt.yticks(np.arange(0, 1, 0.05))
 
         dt = self.Data
-        if show_outliers:
+        if self.Drop_outliers and show_outliers:
             fitted_data = dt[dt.index.get_level_values(CST.Outliers).isin([False])]
             outliers_data = dt[dt.index.get_level_values(CST.Outliers).isin([True])]
             plt.scatter(fitted_data[self.Independent_Var],
