@@ -3,6 +3,7 @@ Created on Fri Nov 19 12:16:08 2021
 @author: Siamak Khatami
 @Email: siamak.khatami@ntnu.no
 @License: https://creativecommons.org/licenses/by-nc-sa/4.0/
+          Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
 @Source: https://github.com/copatrec
 @document: https://github.com/copatrec
 @Cite:

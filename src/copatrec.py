@@ -248,8 +248,9 @@ class Copatrec:
         :return: Standardized Series
         """
         try:
-            max_v = max(values)
-            min_v = min(values)
+            # max and min functions can't calculate properly when there are nan in the data
+            max_v = max(values.dropna())
+            min_v = min(values.dropna())
             values = (values - min_v) / (max_v - min_v)
         except Exception as e:
             lg.error(e)
