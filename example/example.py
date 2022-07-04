@@ -5,36 +5,51 @@ Created on Wed Sep  1 10:23:42 2021
 @author: Siamak Khatami
 @Email: siamak.khatami@ntnu.no
 @License: https://creativecommons.org/licenses/by-nc-sa/4.0/
-          Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
 @Source: https://github.com/copatrec
 @document: https://github.com/copatrec
 @Cite:
 """
+import pandas as pd
+import pickle
+import sys
 try:
     from copatrec import Copatrec  # If package is installed
 except ImportError:
-    from src.copatrec import Copatrec  # If package files cloned
-import pandas as pd
-import pickle
+    sys.path.append('../src/')
+    from copatrec import Copatrec  # If package files cloned
 
-data = pd.read_pickle("../Data/Data.pkl")
-data = data[['year', 'countryname', 'gdppc', 'Government Integrity']]
+
+data = pd.read_pickle("../data/Data.pkl")
+data = data[['countryname', 'year', 'gdppc', 'Government Integrity']]
 time_Col = 'year'
 category_column = 'countryname'
-data.columns
 Dep_Var = 'gdppc'
-data = data.astype({'gdppc':float,
-                    'Government Integrity':float,
-                    'year':str,
-                    'countryname':str})
 
-SM = Copatrec(data, Dep_Var, time_Col, category_column, True, False)
+data = data.astype({'gdppc': float,
+                    'Government Integrity': float,
+                    'year': int,
+                    'countryname': str})
 
+SM = Copatrec(data=data,
+              dependent_var=Dep_Var,
+              category_col=category_column,
+              time_col = time_Col,
+              report=True,
+              report_to_file=False)
 
-
-
-
+Opt_Forms_Dict, All_Forms_Dict, Error_Terms = SM.panel(max_epochs=8000,
+                                                       alpha=0.05,
+                                                       standardization=True,
+                                                       plot=True,
+                                                       show_time_label=False,
+                                                       show_category_label=False,
+                                                       drop_outliers=True,
+                                                       show_outliers=True,
+                                                       plot_predicted_outliers=True,
+                                                       outlier_method='beta')
+Opt_Forms_Dict['Government Integrity'].Time_col_name
 intervals, outliers = SM.panel_outliers(method='beta', plot_pairs = True, plot_hists = True, plot_outliers_name=True)
+sys.exit()
 intervals, outliers = SM.panel_outliers(method='normal', plot_pairs = True, plot_hists = True, plot_outliers_name=True)
 intervals, outliers = SM.panel_outliers(method='IQR', plot_pairs = True, plot_hists = True, plot_outliers_name=True)
 
