@@ -28,14 +28,11 @@ setuptools.setup(
                 "nonlinear patterns (regressions) using Machine Learning.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    
-    
     install_requires=['pandas',
                       'numpy',
                       'matplotlib',
                       'sklearn',
                       'scipy',
-                      'seaborn',
                       'sklearn'],
     classifiers=[
         "Programming Language :: Python :: 3.6",

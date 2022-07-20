@@ -33,7 +33,7 @@ data = data.astype({'gdppc': float,
 SM = Copatrec(data=data,
               dependent_var=Dep_Var,
               category_col=category_column,
-              time_col = time_Col,
+              time_col=time_Col,
               report=True,
               report_to_file=False)
 
