@@ -33,7 +33,8 @@ setuptools.setup(
                       'matplotlib',
                       'sklearn',
                       'scipy',
-                      'sklearn'],
+                      'sklearn',
+                      'pickle'],
     classifiers=[
         "Programming Language :: Python :: 3.6",
         "License :: Free for non-commercial use",

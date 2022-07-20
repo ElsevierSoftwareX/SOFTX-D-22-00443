@@ -11,7 +11,6 @@ be ready in future)
 If the package is imported from GitHub, then it would be suggested
 to install following packages in your system using pip or any other 
 preferred approaches. 
-- warnings : PSF 
 - matplotlib : PSF 
 - numpy :BSD 
 - pandas: BSD 
