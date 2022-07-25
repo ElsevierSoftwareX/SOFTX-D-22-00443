@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="33fed66d-d306-4cdb-a05e-4a0298d9e8f6" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/example.py" beforeDir="false" afterPath="$PROJECT_DIR$/example/example.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/copatrec/constants/constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/copatrec/constants/constants.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/copatrec/summary/summary.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/copatrec/summary/summary.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/copatrec.egg-info/PKG-INFO" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/copatrec.egg-info/SOURCES.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/copatrec.egg-info/dependency_links.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/copatrec.egg-info/requires.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/copatrec.egg-info/top_level.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -142,7 +143,7 @@
       <workItem from="1658309088158" duration="611000" />
       <workItem from="1658309725900" duration="1166000" />
       <workItem from="1658395149328" duration="1068000" />
-      <workItem from="1658740041998" duration="3315000" />
+      <workItem from="1658740041998" duration="3423000" />
     </task>
     <servers />
   </component>

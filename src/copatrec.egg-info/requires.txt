@@ -3,5 +3,5 @@ numpy
 matplotlib
 sklearn
 scipy
-seaborn
 sklearn
+pickle
