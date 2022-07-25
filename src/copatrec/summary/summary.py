@@ -342,7 +342,8 @@ class Summary:
                              'by summary_object.item_name like summary_object.Independent_Var',
             'save(file name)': 'This function adds a pickle to the end of the name and saves the'
                                'file. To load the file you can use pickle package.',
-            'plot(args)': 'will plot the X, Y and fitted line(predicted Ys) on a scatter plot.'
+            'plot(args)': 'will plot the X, Y and fitted line(predicted Ys) on a scatter plot.',
+            'predict(independent values)': 'will predict dependent values based on independent values.'
         }
         for key, value in help_dic.items():
             print(key, value)
