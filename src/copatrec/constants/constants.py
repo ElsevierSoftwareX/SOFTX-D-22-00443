@@ -47,6 +47,7 @@ class Warns:
         pass
     W101 = "It is highly recommended to drop outliers by an expert of the field."
     W102 = "Analysis error: The number of observations are less than 10."
+    W103 = "All X values here should be standardized if the model is generated using standardized values."
     #  Result Messages
     R101 = "Fitted. Model SE: {}"
     R102 = "Done"

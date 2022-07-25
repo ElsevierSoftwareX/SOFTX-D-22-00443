@@ -16,6 +16,7 @@ import sklearn.metrics as skm
 import scipy.stats as sci_stat
 import matplotlib.pyplot as plt
 import pickle
+import warnings
 try:
     #  If package is installed.
     from copatrec.constants.constants import CST, Errs, Warns
@@ -34,6 +35,7 @@ class SumHelp:
         self.Cat_col_name = ': The category column name in the dataset.'
         self.Cross_section_time = ': Time related to the cross_sectional data'
         self.Time_series_category = ': Category of related Time_series'
+        self.Func_name = 'Callable Function'
         self.Func = ': Function name'
         self.Equation_String = ': Text-based equation form'
         self.Equation_Latex = ': Latex-based equation form'
@@ -127,9 +129,10 @@ class Summary:
         self.Reg_Type = reg_type
         self.Independent_Var = independent_var
         self.Dependent_Var = dependent_var
-        self.Func = func.__name__  # the name of function in the patterns file
+        self.Func = func
+        self.Func_name = func.__name__  # the name of function in the patterns file
         y_values = self.Data[self.Dependent_Var]
-        y_hat_values = self.Data[self.Independent_Var + self.Func]
+        y_hat_values = self.Data[self.Independent_Var + self.Func_name]
         self.Time_col_name = time_col_name  # The time column name in the dataset.
         self.Cat_col_name = cat_col_name  # The category column name in the dataset.
         self.Cross_section_time = cross_section_time  # Only for cross-sectional analysis.
@@ -138,7 +141,7 @@ class Summary:
         self.Outlier_method = outlier_method
         self.Intervals = intervals  # ([Xl, Xu], [Yl, Yu])
         self.Outliers = outliers
-        eq_str = self.__equ(equ_patterns, self.Func, coefficients)  # A tuple of strings for the fitted form
+        eq_str = self.__equ(equ_patterns, self.Func_name, coefficients)  # A tuple of strings for the fitted form
         self.Equation_String = eq_str[0]  # Equation in the string form to print in output
         self.Equation_Latex = eq_str[1]  # Equation in the latex style to print on the plots or apps
         self.Coefficients = coefficients  # The fitted coefficients relevant to the equation form
@@ -250,7 +253,7 @@ class Summary:
             print(''.center(align, '='))
             # ==========================================
             self.__print2col((info[0], self.Reg_Type),
-                             (info[1], self.Func))
+                             (info[1], self.Func_name))
             self.__print2col((info[2], self.Dependent_Var),
                              (info[3], self.Independent_Var))
             self.__print2col((info[4], self.Time_series_category),
@@ -426,6 +429,17 @@ class Summary:
         plt.hist(self.Errors, bins=20)
         plt.show()
 
+    def predict(self,
+                x: np.array) -> np.array:
+        """
+        This function receives new X values to predict Y based on fitted model.
+        All X values here should be standardized if the model is generated using standardized values.
+        :return: Y
+        """
+        warnings.simplefilter('always', UserWarning)
+        warnings.warn(Warns.W103)
+        return self.Func(x, *self.Coefficients)
+
     def plot(self,
              show_time_label: bool = False,
              show_category_label: bool = False,
@@ -457,17 +471,17 @@ class Summary:
                         outliers_data[self.Dependent_Var], c='orange')
             if plot_predicted_outliers:
                 plt.plot(fitted_data[self.Independent_Var],
-                         fitted_data[self.Independent_Var + self.Func],
+                         fitted_data[self.Independent_Var + self.Func_name],
                          color='red')
             else:
                 plt.plot(dt[self.Independent_Var],
-                         dt[self.Independent_Var + self.Func],
+                         dt[self.Independent_Var + self.Func_name],
                          color='red')
         else:
             plt.scatter(dt[self.Independent_Var],
                         dt[self.Dependent_Var])
             plt.plot(dt[self.Independent_Var],
-                     dt[self.Independent_Var + self.Func],
+                     dt[self.Independent_Var + self.Func_name],
                      color='red')
         plt.xlabel(self.Independent_Var)
         plt.ylabel(self.Dependent_Var)
@@ -475,7 +489,7 @@ class Summary:
                       "{}: {}"
         graph_title = graph_title.format(self.Reg_Type,
                                          round(self.SE, 3),
-                                         self.Func,
+                                         self.Func_name,
                                          self.Equation_Latex)
         if self.Reg_Type == CST.Panel:
             c_names_category = ()

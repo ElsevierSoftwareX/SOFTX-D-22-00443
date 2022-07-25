@@ -10,6 +10,7 @@ Created on Wed Sep  1 10:23:42 2021
 @Cite:
 """
 import pandas as pd
+import numpy as np
 import pickle
 import sys
 try:
@@ -47,9 +48,14 @@ Opt_Forms_Dict, All_Forms_Dict, Error_Terms = SM.panel(max_epochs=8000,
                                                        show_outliers=True,
                                                        plot_predicted_outliers=True,
                                                        outlier_method='beta')
+Error_Terms['Government Integrity']
+Opt_Forms_Dict['Government Integrity'].Equation_String
+# X values should be standardized if the model has been standardized
+Opt_Forms_Dict['Government Integrity'].predict(np.array([0.5,0.30,0.24]))
 Opt_Forms_Dict['Government Integrity'].Time_col_name
-intervals, outliers = SM.panel_outliers(method='beta', plot_pairs = True, plot_hists = True, plot_outliers_name=True)
 sys.exit()
+intervals, outliers = SM.panel_outliers(method='beta', plot_pairs = True, plot_hists = True, plot_outliers_name=True)
+
 intervals, outliers = SM.panel_outliers(method='normal', plot_pairs = True, plot_hists = True, plot_outliers_name=True)
 intervals, outliers = SM.panel_outliers(method='IQR', plot_pairs = True, plot_hists = True, plot_outliers_name=True)
 
