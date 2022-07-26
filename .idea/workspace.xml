@@ -3,11 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="33fed66d-d306-4cdb-a05e-4a0298d9e8f6" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/copatrec.egg-info/PKG-INFO" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/copatrec.egg-info/SOURCES.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/copatrec.egg-info/dependency_links.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/copatrec.egg-info/requires.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/copatrec.egg-info/top_level.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/example.py" beforeDir="false" afterPath="$PROJECT_DIR$/example/example.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/copatrec/copatrec.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/copatrec/copatrec.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/copatrec/summary/summary.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/copatrec/summary/summary.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -146,6 +144,8 @@
       <workItem from="1658395149328" duration="1068000" />
       <workItem from="1658740041998" duration="3423000" />
       <workItem from="1658747078471" duration="451000" />
+      <workItem from="1658756339975" duration="641000" />
+      <workItem from="1658824812784" duration="1637000" />
     </task>
     <servers />
   </component>

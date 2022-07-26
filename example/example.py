@@ -19,7 +19,9 @@ except ImportError:
     sys.path.append('../src/')
     from copatrec import Copatrec  # If package files cloned
 
-
+import matplotlib.pyplot as plt
+plt.rc('axes', titlesize='18')
+plt.rc('axes', labelsize='14')
 data = pd.read_pickle("../data/Data.pkl")
 data = data[['countryname', 'year', 'gdppc', 'Government Integrity']]
 time_Col = 'year'
@@ -37,7 +39,7 @@ SM = Copatrec(data=data,
               time_col=time_Col,
               report=True,
               report_to_file=False)
-
+intervals, outliers = SM.panel_outliers(method='beta', plot_pairs = True, plot_hists = True, plot_outliers_name=True)
 Opt_Forms_Dict, All_Forms_Dict, Error_Terms = SM.panel(max_epochs=8000,
                                                        alpha=0.05,
                                                        standardization=True,
@@ -48,13 +50,13 @@ Opt_Forms_Dict, All_Forms_Dict, Error_Terms = SM.panel(max_epochs=8000,
                                                        show_outliers=True,
                                                        plot_predicted_outliers=True,
                                                        outlier_method='beta')
+sys.exit()
 Error_Terms['Government Integrity']
 Opt_Forms_Dict['Government Integrity'].Equation_String
 # X values should be standardized if the model has been standardized
 Opt_Forms_Dict['Government Integrity'].predict(np.array([0.5,0.30,0.24]))
 Opt_Forms_Dict['Government Integrity'].Time_col_name
-sys.exit()
-intervals, outliers = SM.panel_outliers(method='beta', plot_pairs = True, plot_hists = True, plot_outliers_name=True)
+
 
 intervals, outliers = SM.panel_outliers(method='normal', plot_pairs = True, plot_hists = True, plot_outliers_name=True)
 intervals, outliers = SM.panel_outliers(method='IQR', plot_pairs = True, plot_hists = True, plot_outliers_name=True)

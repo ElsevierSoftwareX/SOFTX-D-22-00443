@@ -383,7 +383,8 @@ class Copatrec:
             for i, c in pd.concat([x_values, y_values], axis=1).iterrows():
                 plt.annotate(i,
                              (c[0], c[1]),
-                             color='gray')
+                             color='gray',
+                             fontsize=14)
             # for i, c in enumerate(category_names):
             #     # Preparing annotation of the plot to show
             #     # related data points information.

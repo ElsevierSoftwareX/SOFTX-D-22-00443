@@ -447,6 +447,7 @@ class Summary:
              show_outliers: bool = False,
              plot_predicted_outliers: bool = False):
         """
+        TODO: parametrize figure size
         This function plots the result of analysis using the summary object;
         :param show_time_label: Weather to show the labels of the times on the plot
         Only works if the regression type is panel or time_series
@@ -546,7 +547,8 @@ class Summary:
             plt.annotate(txt,
                          (independent_var_values[i],
                           dependent_var_values[i]),
-                         color='gray')
+                         color='gray',
+                         fontsize=14)
 
     def save(self,
              name: str):
