@@ -501,10 +501,11 @@ class Summary:
                      color='red')
         plt.xlabel(self.Independent_Var)
         plt.ylabel(self.Dependent_Var)
-        graph_title = "Regression type: {} | SE: {}\n" \
+        graph_title = "Regression type: {} | SE: {}(Coverage:{})\n" \
                       "{}: {}"
         graph_title = graph_title.format(self.Reg_Type,
                                          round(self.SE, 3),
+                                         round(self.Se_Coverage, 3),
                                          self.Func_name,
                                          self.Equation_Latex)
         if self.Reg_Type == CST.Panel:
