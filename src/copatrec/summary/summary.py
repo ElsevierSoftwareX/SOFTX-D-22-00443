@@ -62,8 +62,10 @@ class SumHelp:
         self.MSE = ': Mean squared error.'
         self.R_MSE = ": Root mean squared error."
         self.SE = ': Standard error of regression/estimation(Percent)' \
-                  'Typically a function is called valid if SE is smaller than ' \
-                  'alpha/2(accepted degree of uncertainty)'
+                  'Typically a function is called valid if (1-alpha) percent ' \
+                  'of data points are fall within -/+ 2*se'
+        self.Se_Coverage = ': indicates how many percentage of data points are ' \
+                           'fall within SE intervals. (1-alpha)% and above is acceptable.'
         self.SSM = ': Corrected Sum of Squares for Model/ sum of squares for regression'
         self.SST = ': Corrected Sum of Squares Total'
         self.DMF = ': Corrected Degrees of Freedom for Model'
@@ -154,14 +156,11 @@ class Summary:
         self.DFT = self.N - 1  # Corrected Degrees of Freedom Total
         self.R2adj = 1 - ((1 - self.R2)*self.DFT) / self.Deg_Free
         try:
-            self.SE_Params = np.sqrt(np.diag(np.abs(
-                self.Covariance_Coefficients)))  # One standard deviation errors
+            self.SE_Params = np.sqrt(np.diag(np.abs(self.Covariance_Coefficients)))  # One standard deviation errors
             # In some cases Covariance_Coefficients can contain Nan/negative items
-
             self.T = self.Coefficients / self.SE_Params
             self.T_Table = sci_stat.t.ppf((1 - (self.Alpha / 2)), self.Deg_Free)
-            self.Par_P_values = (1.000 - sci_stat.t.cdf(np.abs(self.T),
-                                                        self.Deg_Free)) * 2.000
+            self.Par_P_values = (1.000 - sci_stat.t.cdf(np.abs(self.T), self.Deg_Free)) * 2.000
             ebm = self.T_Table * self.SE_Params
             par_ciu = self.Coefficients + ebm
             par_cil = self.Coefficients - ebm
@@ -176,7 +175,7 @@ class Summary:
         self.MSE = self.SSE / self.Deg_Free
         self.R_MSE = np.sqrt(self.MSE)
         self.SE = np.round(np.sqrt(self.SSE/self.Deg_Free), 3)
-
+        self.Se_Coverage = self.__se_coverage()
         # Shapiro test is not good for the big datasets, because the nature of 
         # p_value is to imply that data is not sufficient to prove the distribution.
         # So, Anderson is better one.
@@ -204,6 +203,20 @@ class Summary:
         self.Prob_F = 1.000 - sci_stat.f.cdf(np.abs(self.F),
                                              self.DFM,
                                              self.Deg_Free)
+
+    def __se_coverage(self):
+        """
+        How many percentages of data points fall within SE intervals?
+        The percentage should be equal or larger than (1-alpha)
+        :return: A percentage
+        """
+        y = self.Data[self.Dependent_Var]
+        y_hat = self.Data[self.Independent_Var + self.Func_name]
+        y_hat_se_plus = y_hat + 2 * self.SE
+        y_hat_se_minus = y_hat - 2 * self.SE
+        points_intervals = list(zip(y, y_hat_se_plus, y_hat_se_minus))
+        in_or_out = [(i_minus <= i) & (i <= i_plus) for i, i_plus, i_minus in points_intervals]
+        return sum(in_or_out) / len(in_or_out)
 
     def summary_items(self,
                       keys: list = None):
@@ -447,7 +460,8 @@ class Summary:
              show_outliers: bool = False,
              plot_predicted_outliers: bool = False):
         """
-        TODO: parametrize figure size
+        TODO: Parametrize figure size
+        TODO: New Feature: plot time_series or cross_sectional beside panel plot to show bigger and smaller scale
         This function plots the result of analysis using the summary object;
         :param show_time_label: Weather to show the labels of the times on the plot
         Only works if the regression type is panel or time_series

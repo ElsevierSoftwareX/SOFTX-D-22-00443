@@ -46,7 +46,7 @@ Opt_Forms_Dict, All_Forms_Dict, Error_Terms = SM.panel(max_epochs=8000,
                                                        plot=True,
                                                        show_time_label=False,
                                                        show_category_label=False,
-                                                       drop_outliers=True,
+                                                       drop_outliers=False,
                                                        show_outliers=True,
                                                        plot_predicted_outliers=True,
                                                        outlier_method='beta')

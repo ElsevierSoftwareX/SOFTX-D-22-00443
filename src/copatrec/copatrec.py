@@ -378,7 +378,7 @@ class Copatrec:
         """
         y_lower_band, y_upper_band = y_intervals
         x_lower_band, x_upper_band = x_intervals
-        plt.figure(figsize=(15, 15))
+        plt.figure(figsize=(10, 10))
         if plot_names:
             for i, c in pd.concat([x_values, y_values], axis=1).iterrows():
                 plt.annotate(i,
