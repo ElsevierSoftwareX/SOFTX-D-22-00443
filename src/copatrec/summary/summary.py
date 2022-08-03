@@ -252,12 +252,6 @@ class Summary:
             for key, value in report_dict.items():
                 print(key, ' : ', value)
         else:
-            info = ["Data Type:", "Equation:", "Dep.Var", "Independent.Var:",
-                    "Time:", "Categories:", "Observations:", "Deg.Freedom:",
-                    "Standardized:", "Significance Level:",
-                    "Standard Error of Regression:", "Error Normal Test:",
-                    "Errors Normality:", "R2:", "R2.Adj:", "F:", "F_Table:",
-                    "Prob(F):", "Equation:"]
             align = 80
             print(''.center(align, '#'))
             ###########################################
@@ -265,41 +259,34 @@ class Summary:
             #           Regression Summary            #
             print(''.center(align, '='))
             # ==========================================
-            self.__print2col((info[0], self.Reg_Type),
-                             (info[1], self.Func_name))
-            self.__print2col((info[2], self.Dependent_Var),
-                             (info[3], self.Independent_Var))
-            self.__print2col((info[4], self.Time_series_category),
-                             (info[5], self.Time_series_category))
-            self.__print2col((info[6], self.N),
-                             (info[7], self.Deg_Free))
-            self.__print2col((info[8], self.Standardization),
-                             (info[9], self.Alpha))
+            self.__print2col(("Data Type:", self.Reg_Type),
+                             ("Equation:", self.Func_name))
+            self.__print2col(("Dep.Var", self.Dependent_Var),
+                             ("Independent.Var:", self.Independent_Var))
+            self.__print2col(("Time:", self.Time_series_category),
+                             ("Categories:", self.Time_series_category))
+            self.__print2col(("Observations:", self.N),
+                             ("Deg.Freedom:", self.Deg_Free))
+            self.__print2col(("Standardized:", self.Standardization),
+                             ("Significance Level:", self.Alpha))
+            self.__print2col(("SE:", round(self.SE, 3)),
+                             ("SE Interval Coverage:", round(self.Se_Coverage, 3)))
             print(''.center(align, '='))
             # ==========================================
-
+            # Note 1
             self.__print1col(('Note 1:', self.General_Des))
             print(''.center(align, '='))
-            # Note 1
+
             # ==========================================
-            print('Nonlinear Analysis'.center(align))
-            #           Nonlinear Analysis            #
-            print(''.center(align, '-'))
-            # ------------------------------------------
-            self.__print1col((info[10], self.SE))
-            print(''.center(10, '*'))
-            self.__print1col((CST.Note, Warns.S101))
             # Note 2
-            # ------------------------------------------
-            print(''.center(align, '.'))
-            self.__print1col((info[11], CST.Statistic +
+            self.__print1col(("Error Normal Test:", CST.Statistic +
                               str(round(self.Error_Normal_Test[0], 3)) + ",  " +
                               CST.P_val + " " +
                               str(round(self.Error_Normal_Test[1], 3))))
-            self.__print1col((info[12], self.Is_Error_Normal))
+            self.__print1col(("Errors Normality:", self.Is_Error_Normal))
             print(''.center(10, '*'))
             self.__print1col((CST.Note, Warns.S102))
-            # Note 3
+
             # ------------------------------------------
             print(''.center(align, '='))
             # ==========================================
@@ -323,18 +310,18 @@ class Summary:
                                   self.Par_CI[b]))
             print(''.center(align, '-'))
             # ------------------------------------------
-            self.__print3col((info[13], round(self.R2, 3)),
-                             (info[14], round(self.R2adj, 3)),
+            self.__print3col(("R2:", round(self.R2, 3)),
+                             ("R2.Adj:", round(self.R2adj, 3)),
                              ('', ''))
-            self.__print3col((info[15], round(self.F, 3)),
-                             (info[16], round(self.F_Table, 3)),
-                             (info[17], round(self.Prob_F, 3)))
+            self.__print3col(("F:", round(self.F, 3)),
+                             ("F_Table:", round(self.F_Table, 3)),
+                             ("Prob(F):", round(self.Prob_F, 3)))
             print(''.center(align, '='))
             # ==========================================
             print('Equation'.center(align))
             #           Equation            #
             print(''.center(align, '-'))
-            self.__print1col((info[18], self.Equation_String))
+            self.__print1col(("Equation:", self.Equation_String))
             print(''.center(align, '#'))
             ###########################################
             # for key, value in self.__dict__.items():

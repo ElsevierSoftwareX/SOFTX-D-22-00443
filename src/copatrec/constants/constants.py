@@ -60,15 +60,10 @@ class Warns:
     EF101 = 'Warning: Here xb equation Represents tanh.'
 
     # Summary object warnings
-    S100 = 'Copatrec aims to analyze complex behaviors. Complex functions' \
-           ' can generate their unique curve or create a snapshot of a specific' \
-           ' range. Thus, it would be beneficial to compare the curve with the' \
-           ' already known complex behaviors. For example, the logistic function' \
-           ' is representative of S-shaped behavior. However, all other tasks like' \
-           ' oscillator or sine can generate S-shape behavior in a specific range.' \
-           ' So, while the equation can be used for predictions(so sensitive and' \
-           ' dependent on the case), an expert should be involved in interpreting' \
-           ' behavior. '
+    S100 = 'The optimal regression is selected based on the smallest SE. ' \
+           'However, all forms in which their Se_Coverage (SE Interval Coverage) ' \
+           'is equal or more than (1-significant_level) is acceptable.' \
+
     S101 = 'Standard error of regression can be used to evaluate' \
            ' linear and nonlinear regressions and is valid if it is less' \
            ' than the desired significance level. SE is the primary evaluation' \
