@@ -49,7 +49,7 @@ class Warns:
     W102 = "Analysis error: The number of observations are less than 10."
     W103 = "All X values here should be standardized if the model is generated using standardized values."
     #  Result Messages
-    R101 = "Fitted. Model SE: {}"
+    R101 = "Fitted. Model SE: {} and Goodness of Fit: {}"
     R102 = "Done"
 
     #  Progress
@@ -61,8 +61,9 @@ class Warns:
 
     # Summary object warnings
     S100 = 'The optimal regression is selected based on the smallest SE. ' \
-           'However, all forms in which their Se_Coverage (SE Interval Coverage) ' \
-           'is equal or more than (1-significant_level) is acceptable.' \
+           'However, all forms in which their Goodness of Fit(SE) ' \
+           'is equal to or more than (1-significant_level) are acceptable. ' \
+           'The "Goodness of Fit" is calculated based on SE Intervals.' \
 
     S101 = 'Standard error of regression can be used to evaluate' \
            ' linear and nonlinear regressions and is valid if it is less' \

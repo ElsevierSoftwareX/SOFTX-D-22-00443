@@ -64,8 +64,12 @@ class SumHelp:
         self.SE = ': Standard error of regression/estimation(Percent)' \
                   'Typically a function is called valid if (1-alpha) percent ' \
                   'of data points are fall within -/+ 2*se'
-        self.Se_Coverage = ': indicates how many percentage of data points are ' \
-                           'fall within SE intervals. (1-alpha)% and above is acceptable.'
+        self.Outlier_Ratio = ': Ratio of data points which falls outside of the SE Interval. Any number less than' \
+                             'alpha (significant level) is acceptable.'
+        self.SE_Fit_Goodness = ': An alternative to Outlier_Ration. ' \
+                               'Indicates how many percentage of data points are fall ' \
+                               'within SE intervals. It equals to 1 - Outlier_Ratio. ' \
+                               'Any number equal to and above (1-alpha)% is acceptable.'
         self.SSM = ': Corrected Sum of Squares for Model/ sum of squares for regression'
         self.SST = ': Corrected Sum of Squares Total'
         self.DMF = ': Corrected Degrees of Freedom for Model'
@@ -174,8 +178,9 @@ class Summary:
         # Mean of Squares for Error
         self.MSE = self.SSE / self.Deg_Free
         self.R_MSE = np.sqrt(self.MSE)
-        self.SE = np.round(np.sqrt(self.SSE/self.Deg_Free), 3)
-        self.Se_Coverage = self.__se_coverage()
+        self.SE = np.round(np.sqrt(self.SSE/self.Deg_Free), 3)  # Its unit follows independent variable's unit.
+        self.SE_Fit_Goodness = self.__se_coverage()  # Ratio between 0 and 1
+        self.Outlier_Ratio = 1 - self.SE_Fit_Goodness  # Ratio between 0 and 1
         # Shapiro test is not good for the big datasets, because the nature of 
         # p_value is to imply that data is not sufficient to prove the distribution.
         # So, Anderson is better one.
@@ -215,8 +220,9 @@ class Summary:
         y_hat_se_plus = y_hat + 2 * self.SE
         y_hat_se_minus = y_hat - 2 * self.SE
         points_intervals = list(zip(y, y_hat_se_plus, y_hat_se_minus))
-        in_or_out = [(i_minus <= i) & (i <= i_plus) for i, i_plus, i_minus in points_intervals]
-        return sum(in_or_out) / len(in_or_out)
+        points_within_intervals = [(i_minus <= i) & (i <= i_plus) for i, i_plus, i_minus in points_intervals]
+        # True(1) for points that are in boundaries and False(0) for rest.
+        return round(sum(points_within_intervals) / len(points_within_intervals), 3)
 
     def summary_items(self,
                       keys: list = None):
@@ -270,12 +276,12 @@ class Summary:
             self.__print2col(("Standardized:", self.Standardization),
                              ("Significance Level:", self.Alpha))
             self.__print2col(("SE:", round(self.SE, 3)),
-                             ("SE Interval Coverage:", round(self.Se_Coverage, 3)))
+                             ("Goodness of Fit:", round(self.SE_Fit_Goodness, 3)))
             print(''.center(align, '='))
             # ==========================================
             # Note 1
-            self.__print1col(('Note 1:', self.General_Des))
-            print(''.center(align, '='))
+            self.__print1col(('Note:\n', self.General_Des))
+            print(''.center(align, '-'))
 
             # ==========================================
             # Note 2
@@ -284,23 +290,22 @@ class Summary:
                               CST.P_val + " " +
                               str(round(self.Error_Normal_Test[1], 3))))
             self.__print1col(("Errors Normality:", self.Is_Error_Normal))
-            print(''.center(10, '*'))
             self.__print1col((CST.Note, Warns.S102))
 
             # ------------------------------------------
             print(''.center(align, '='))
             # ==========================================
-            print('Linear Analysis'.center(align))
+            print('Other Analysis'.center(align))
             #           Linear Analysis            #
             print(''.center(align, '-'))
             # ------------------------------------------
-            alignment = int(align/6)
+            alignment = int(align/10)
             print('Param'.ljust(alignment),
-                  'Coefficients'.ljust(alignment),
-                  'Str.Err'.ljust(alignment),
+                  'Coeffs'.ljust(alignment),
+                  'Str.Err'.ljust(2*alignment),
                   'T_stat'.ljust(alignment),
                   'p_value'.ljust(alignment),
-                  'T_val.Conf'.ljust(alignment))
+                  'T_val.Conf'.ljust(4*alignment))
             for b in range(len(self.Coefficients)):
                 self.__print6col(('B' + str(b),
                                   self.Coefficients[b],
@@ -387,8 +392,8 @@ class Summary:
         key1, val1 = s1
         key2, val2 = s2
         key3, val3 = s3
-        c_align = 3
-        d_cols = int(align / 3)
+        c_align = 4
+        d_cols = int(align / 4)
         print(key1, str(val1).rjust(d_cols - (len(key1) + c_align)),
               ''.center(c_align),
               key2, str(val2).rjust(d_cols - (len(key2) + c_align)),
@@ -403,13 +408,13 @@ class Summary:
                 :return:
                 """
         param, coefficients, se, t, p, ci = vals
-        d_cols = int(align / 6)
+        d_cols = int(align / 10)
         print(param.ljust(d_cols),
               str(round(coefficients, 3)).ljust(d_cols),
-              str(round(se, 3)).ljust(d_cols),
+              str(round(se, 3)).ljust(2*d_cols),
               str(round(t, 3)).ljust(d_cols),
               str(round(p, 3)).ljust(d_cols),
-              str(np.round(ci, 3)).ljust(d_cols))
+              str(np.round(ci, 3)).ljust(4*d_cols))
 
     @staticmethod
     def __equ(obj, f, c):
@@ -492,7 +497,7 @@ class Summary:
                       "{}: {}"
         graph_title = graph_title.format(self.Reg_Type,
                                          round(self.SE, 3),
-                                         round(self.Se_Coverage, 3),
+                                         round(self.SE_Fit_Goodness, 3),
                                          self.Func_name,
                                          self.Equation_Latex)
         if self.Reg_Type == CST.Panel:

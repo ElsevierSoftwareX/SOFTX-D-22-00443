@@ -1,0 +1,47 @@
+################################################################################
+                               Regression Summary                               
+================================================================================
+Data Type:                      Panel      Equation:          oscillating_growth
+Dep.Var                         gdppc      Independent.Var: Government Integrity
+Time:                             ALL      Categories:                       ALL
+Observations:                    3578      Deg.Freedom:                     3568
+Standardized:                    True      Significance Level:              0.05
+SE:                             0.086      Goodness of Fit:                0.939
+================================================================================
+Note:
+ The optimal regression is selected based on the smallest SE. However, all
+ forms in which their Goodness of Fit(SE) is equal to or more than (1-significan
+t_level) are acceptable. The "Goodness of Fit" is calculated based on SE Interva
+ls.                                                                             
+--------------------------------------------------------------------------------
+Error Normal Test: Statistic: 1122.356,  p_value: 0.0                           
+Errors Normality: False                                                         
+Note:  The Normal test uses Skewness and kurtosis to evaluate whether estimation
+ errors are distributed Normally around zero. "Error Normal Test" uses using p-v
+alue, which means  "There is (not) enough evidence to claim errors are normally 
+distributed" and should not be used alone to accept or reject the functionality 
+of a model.                                                                     
+================================================================================
+                                 Other Analysis                                 
+--------------------------------------------------------------------------------
+Param    Coeffs   Str.Err          T_stat   p_value  T_val.Conf                      
+B0       0.394    0.02             19.222   0.0      [0.354 0.434]                   
+B1       0.29     0.038            7.673    0.0      [0.216 0.365]                   
+B2       -2.61    10.602           -0.246   0.806    [-23.396  18.177]               
+B3       2.966    1.919            1.546    0.122    [-0.796  6.728]                 
+B4       3.141    6.372            0.493    0.622    [-9.352 15.634]                 
+B5       14.278   118.238          0.121    0.904    [-217.543  246.1  ]             
+B6       -4.541   3605619.168      -0.0     1.0      [-7069286.336  7069277.253]     
+B7       5.425    4307622.432      0.0      1.0      [-8445644.383  8445655.233]     
+B8       -6.687   793962.4         -0.0     1.0      [-1556672.457  1556659.083]     
+B9       12.053   1.666            7.235    0.0      [ 8.787 15.319]                 
+--------------------------------------------------------------------------------
+R2:         0.738      R2.Adj:     0.738                       
+F:       1119.297      F_Table:    1.883      Prob(F):      0.0
+================================================================================
+                                    Equation                                    
+--------------------------------------------------------------------------------
+Equation: 0.3939 + (0.2904 * sin((-2.6095 * x^(2.966)) + 3.1412)^(14.2784) * 1 /
+ (1 + e^(-x))) + (-4.5414 / (5.4254 + e^(-6.687 + (12.0528x))) * 1 / (1 + e^(x))
+)                                                                               
+################################################################################

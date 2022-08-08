@@ -32,14 +32,6 @@ except ImportError:
     from copatrec.summary.summary import Summary
     from copatrec.constants.constants import CST, Warns, Errs
 
-#       TODO: Standardization has a big effect on the SE of models. On the other hand
-#           sometimes it is needed to have models using their regular data form, So, a rescale is
-#           needed to avoid mathematical errors. However, this cause higher SE.
-#           One approach to solve this is to have Standardized model, but rescale
-#           predictions to the original ranges. Any changed in the Max number can
-#           cause problems.
-
-
 class Copatrec:
     def __init__(self,
                  data: pd.DataFrame,
@@ -458,7 +450,6 @@ class Copatrec:
 
     @staticmethod
     def __outlier_names_flattener(outliers):
-        # TODO: Function description
         """
         This function receives two list of outliers for lower and upper bands
         and joints these lists together.
@@ -955,7 +946,8 @@ class Copatrec:
                                 standardization=standardization, outlier_method=outlier_method,
                                 outliers=outliers, intervals=intervals, epochs=max_epochs,
                                 alpha=alpha, time_series_category=Cat, cross_section_time=CST.ALL)
-                            lg.info(Warns.R101.format(model_summary.SE))
+                            lg.info(Warns.R101.format(model_summary.SE,
+                                                      model_summary.SE_Fit_Goodness))
                             results[func.__name__] = model_summary
                             errs[func.__name__] = None
                             if model_summary.SE < best_se:
@@ -1105,7 +1097,8 @@ class Copatrec:
                                 outliers=outliers, epochs=max_epochs, independent_var=independent_var,
                                 outlier_method=outlier_method,  intervals=intervals, alpha=alpha,
                                 cross_section_time=time, time_series_category=CST.ALL)
-                            lg.info(Warns.R101.format(model_summary.SE))  # Log the fitted message
+                            lg.info(Warns.R101.format(model_summary.SE,
+                                                      model_summary.SE_Fit_Goodness))  # Log the fitted message
                             results[func.__name__] = model_summary  # Save the model_summary
                             errs[func.__name__] = np.nan  # Since everything is ok, no error term.
                             if model_summary.SE < best_se:
@@ -1236,7 +1229,8 @@ class Copatrec:
                             drop_outliers=drop_outliers, outlier_method=outlier_method,
                             outliers=outliers, intervals=intervals, epochs=max_epochs, alpha=alpha,
                             cross_section_time=CST.ALL, time_series_category=CST.ALL)
-                        lg.info(Warns.R101.format(model_summary.SE))
+                        lg.info(Warns.R101.format(model_summary.SE,
+                                                  model_summary.SE_Fit_Goodness))
                         results[func.__name__] = model_summary
                         errs[func.__name__] = np.nan
                         if model_summary.SE < best_se:
