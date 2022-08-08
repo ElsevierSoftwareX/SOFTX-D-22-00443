@@ -493,7 +493,7 @@ class Summary:
                      color='red')
         plt.xlabel(self.Independent_Var)
         plt.ylabel(self.Dependent_Var)
-        graph_title = "Regression type: {} | SE: {}(Coverage:{})\n" \
+        graph_title = "Regression type: {} | SE:{} | Goodness of fit:{}\n" \
                       "{}: {}"
         graph_title = graph_title.format(self.Reg_Type,
                                          round(self.SE, 3),
