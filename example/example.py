@@ -39,10 +39,12 @@ SM = Copatrec(data=data,
               time_col=time_Col,
               report=True,
               report_to_file=True)
+
 intervals, outliers = SM.panel_outliers(method='beta', 
                                         plot_pairs = True, 
                                         plot_hists = True, 
                                         plot_outliers_name=True)
+
 Opt_Forms_Dict, All_Forms_Dict, Error_Terms = SM.panel(max_epochs=8000,
                                                        alpha=0.05,
                                                        standardization=True,
@@ -54,64 +56,26 @@ Opt_Forms_Dict, All_Forms_Dict, Error_Terms = SM.panel(max_epochs=8000,
                                                        plot_predicted_outliers=True,
                                                        outlier_method='beta')
 Opt_Form = Opt_Forms_Dict['Government Integrity']
+print(Error_Terms['Government Integrity'])
+print(Opt_Forms_Dict['Government Integrity'].Equation_String)
+# independent variable values should be standardized if the model has been standardized
+print(Opt_Forms_Dict['Government Integrity'].predict(np.array([0.5,0.30,0.24])))
+print(Opt_Forms_Dict['Government Integrity'].Time_col_name)
 Opt_Form.report()
 sys.exit()
-Error_Terms['Government Integrity']
-Opt_Forms_Dict['Government Integrity'].Equation_String
-# X values should be standardized if the model has been standardized
-Opt_Forms_Dict['Government Integrity'].predict(np.array([0.5,0.30,0.24]))
-Opt_Forms_Dict['Government Integrity'].Time_col_name
 
+# Funcitons with different setups
+Opt_Form.save("test") # Saving summary object (model)
+All_Forms_Dict['Government Integrity']['logistic'].summary_items() # Print items in model object
+All_Forms_Dict['Government Integrity']['logistic'].Data # print dataset
+All_Forms_Dict['Government Integrity']['logistic'].Independent_Var # independent variable name
+All_Forms_Dict['Government Integrity']['logistic'].report() # print a report
+All_Forms_Dict['Government Integrity']['logistic'].help() # print a general help
 
-intervals, outliers = SM.panel_outliers(method='normal', plot_pairs = True, plot_hists = True, plot_outliers_name=True)
-intervals, outliers = SM.panel_outliers(method='IQR', plot_pairs = True, plot_hists = True, plot_outliers_name=True)
-
-intervals, outliers = SM.time_series_outliers(sl=0.05, method='beta', plot_pairs=True, plot_hists = True, plot_outliers_name=True)
-intervals, outliers = SM.time_series_outliers(sl=0.05, method='normal', plot_pairs=True, plot_hists = True, plot_outliers_name=True)
-intervals, outliers = SM.time_series_outliers(sl=0.05, method='IQR', plot_pairs=True, plot_hists = True, plot_outliers_name=True)
-
-intervals, outliers = SM.cross_sectional_outliers(sl=0.05, method='beta', plot_pairs=True, plot_hists=True, plot_outliers_name=True)
-intervals, outliers = SM.cross_sectional_outliers(sl=0.05, method='normal', plot_pairs=True, plot_hists=True, plot_outliers_name=True)
-intervals, outliers = SM.cross_sectional_outliers(sl=0.05, method='IQR', plot_pairs=True, plot_hists=True, plot_outliers_name=True)
-
-Opt_Forms_Dict, All_Forms_Dict, Error_Terms = SM.panel(max_epochs=8000,
-                                                       alpha=0.05,
-                                                       standardization=True,
-                                                       plot=True,
-                                                       show_time_label=False,
-                                                       show_category_label=False,
-                                                       drop_outliers=True,
-                                                       show_outliers=True,
-                                                       plot_predicted_outliers=True,
-                                                       outlier_method='beta')
-Opt_Forms_Dict, All_Forms_Dict, Error_Terms = SM.time_series(max_epochs=8000,
-                                                       alpha=0.05,
-                                                       standardization=True,
-                                                       plot=True,
-                                                       show_time_label=False,
-                                                       show_category_label=False,
-                                                       drop_outliers=False,
-                                                       show_outliers=True,
-                                                       plot_predicted_outliers=True,
-                                                       outlier_method='beta')
-Opt_Forms_Dict, All_Forms_Dict, Error_Terms = SM.cross_sectional(max_epochs=8000,
-                                                             alpha=0.05,
-                                                             plot=True,
-                                                             drop_outliers=False,
-                                                             show_outliers=True,
-                                                             plot_predicted_outliers=True,
-                                                             show_time_label=False,
-                                                             outlier_method='beta',
-                                                             plot_only_best=True)
-
-
-All_Forms_Dict['Government Integrity']['sin'].save("test")
-All_Forms_Dict['Government Integrity']['sin'].summary_items()
-All_Forms_Dict['Government Integrity']['sin'].Data
-All_Forms_Dict['Government Integrity']['sin'].Independent_Var
-All_Forms_Dict['Government Integrity']['sin'].report()
-All_Forms_Dict['Government Integrity']['sin'].help()
-
+# loading a summary object (model)
 file = open('test.pickle', 'rb')
 summ = pickle.load(file)
-summ.report()
+summ.report() # printing report
+
+
+

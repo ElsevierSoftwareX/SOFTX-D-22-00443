@@ -34,3 +34,47 @@ INFO - ***********oscillating_growth***********
 INFO - Fitted. Model SE: 0.086 and Goodness of Fit: 0.939
 INFO - ************double_gaussian*************
 INFO - Fitted. Model SE: 0.091 and Goodness of Fit: 0.94
+WARNING - E:\OneDrive\OneDrive - NTNU\PhD\Research\copatrec\example\../src\copatrec\summary\summary.py:446: UserWarning: All X values here should be standardized if the model is generated using standardized values.
+  warnings.warn(Warns.W103)
+
+INFO - *****Finding outliers for a Panel analysis, Method:beta*****
+WARNING - It is highly recommended to drop outliers by an expert of the field.
+INFO - variable gdppc started.
+INFO - variable gdppc done.
+INFO - variable Government Integrity started.
+INFO - variable Government Integrity done.
+INFO - **********Outliers processed.***********
+INFO - ===X: gdppc, Y: Government Integrity====
+INFO - ******************sin*******************
+INFO - Fitted. Model SE: 0.091 and Goodness of Fit: 0.939
+INFO - ******************sinh******************
+INFO - Fitted. Model SE: 0.094 and Goodness of Fit: 0.945
+INFO - ******************cos*******************
+INFO - Fitted. Model SE: 0.091 and Goodness of Fit: 0.939
+INFO - ******************cosh******************
+INFO - Fitted. Model SE: 0.096 and Goodness of Fit: 0.943
+INFO - ******************tan*******************
+INFO - Fitted. Model SE: 0.168 and Goodness of Fit: 0.947
+INFO - ******************tanh******************
+INFO - Fitted. Model SE: 0.101 and Goodness of Fit: 0.958
+INFO - ******************lnx*******************
+INFO - Fitted. Model SE: 0.128 and Goodness of Fit: 0.968
+INFO - ******************logx******************
+INFO - Fitted. Model SE: 0.128 and Goodness of Fit: 0.968
+INFO - ***************euler_exp****************
+INFO - Fitted. Model SE: 0.093 and Goodness of Fit: 0.943
+INFO - ******************exp*******************
+INFO - Fitted. Model SE: 0.093 and Goodness of Fit: 0.943
+INFO - ****************logistic****************
+INFO - Fitted. Model SE: 0.09 and Goodness of Fit: 0.938
+INFO - ***************polynomial***************
+INFO - Fitted. Model SE: 0.092 and Goodness of Fit: 0.94
+INFO - ***********oscillating_growth***********
+INFO - Fitted. Model SE: 0.086 and Goodness of Fit: 0.939
+INFO - ************double_gaussian*************
+INFO - Fitted. Model SE: 0.091 and Goodness of Fit: 0.94
+WARNING - E:\OneDrive\OneDrive - NTNU\PhD\Research\copatrec\example\../src\copatrec\summary\summary.py:446: UserWarning: All X values here should be standardized if the model is generated using standardized values.
+  warnings.warn(Warns.W103)
+
+ERROR - Task was destroyed but it is pending!
+task: <Task pending name='Task-2' coro=<Kernel.poll_control_queue() running at C:\Users\siamakkh\Anaconda3\lib\site-packages\ipykernel\kernelbase.py:227> wait_for=<Future finished result=<Future at 0x...state=pending>> cb=[_chain_future.<locals>._call_set_state() at C:\Users\siamakkh\Anaconda3\lib\asyncio\futures.py:391]>
