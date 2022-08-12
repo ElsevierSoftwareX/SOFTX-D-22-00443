@@ -64,12 +64,6 @@ class SumHelp:
         self.SE = ': Standard error of regression/estimation(Percent)' \
                   'Typically a function is called valid if (1-alpha) percent ' \
                   'of data points are fall within -/+ 2*se'
-        self.Outlier_Ratio = ': Ratio of data points which falls outside of the SE Interval. Any number less than' \
-                             'alpha (significant level) is acceptable.'
-        self.SE_Fit_Goodness = ': An alternative to Outlier_Ration. ' \
-                               'Indicates how many percentage of data points are fall ' \
-                               'within SE intervals. It equals to 1 - Outlier_Ratio. ' \
-                               'Any number equal to and above (1-alpha)% is acceptable.'
         self.SSM = ': Corrected Sum of Squares for Model/ sum of squares for regression'
         self.SST = ': Corrected Sum of Squares Total'
         self.DMF = ': Corrected Degrees of Freedom for Model'
@@ -276,7 +270,7 @@ class Summary:
             self.__print2col(("Standardized:", self.Standardization),
                              ("Significance Level:", self.Alpha))
             self.__print2col(("SE:", round(self.SE, 3)),
-                             ("Goodness of Fit:", round(self.SE_Fit_Goodness, 3)))
+                             (" ", " "))
             print(''.center(align, '='))
             # ==========================================
             # Note 1
@@ -493,11 +487,10 @@ class Summary:
                      color='red')
         plt.xlabel(self.Independent_Var)
         plt.ylabel(self.Dependent_Var)
-        graph_title = "Regression type: {} | SE:{} | Goodness of fit:{}\n" \
+        graph_title = "Regression type: {} | SE:{}\n" \
                       "{}: {}"
         graph_title = graph_title.format(self.Reg_Type,
                                          round(self.SE, 3),
-                                         round(self.SE_Fit_Goodness, 3),
                                          self.Func_name,
                                          self.Equation_Latex)
         if self.Reg_Type == CST.Panel:

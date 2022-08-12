@@ -55,6 +55,8 @@ Opt_Forms_Dict, All_Forms_Dict, Error_Terms = SM.panel(max_epochs=8000,
                                                        show_outliers=True,
                                                        plot_predicted_outliers=True,
                                                        outlier_method='beta')
+
+
 Opt_Form = Opt_Forms_Dict['Government Integrity']
 print(Error_Terms['Government Integrity'])
 print(Opt_Forms_Dict['Government Integrity'].Equation_String)
@@ -62,8 +64,11 @@ print(Opt_Forms_Dict['Government Integrity'].Equation_String)
 print(Opt_Forms_Dict['Government Integrity'].predict(np.array([0.5,0.30,0.24])))
 print(Opt_Forms_Dict['Government Integrity'].Time_col_name)
 Opt_Form.report()
-sys.exit()
+e = Opt_Form.Errors
+Opt_Form.Data.columns
 
+sum(abs(e))/sum(Opt_Form.Data[Dep_Var])
+sys.exit()
 # Funcitons with different setups
 Opt_Form.save("test") # Saving summary object (model)
 All_Forms_Dict['Government Integrity']['logistic'].summary_items() # Print items in model object
