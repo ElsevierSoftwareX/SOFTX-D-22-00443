@@ -6,7 +6,7 @@ Dep.Var                         gdppc      Independent.Var: Government Integrity
 Time:                             ALL      Categories:                       ALL
 Observations:                    3578      Deg.Freedom:                     3568
 Standardized:                    True      Significance Level:              0.05
-SE:                             0.086      Goodness of Fit:                0.939
+SE:                             0.086      
 ================================================================================
 Note:
  The optimal regression is selected based on the smallest SE. However, all

@@ -64,10 +64,6 @@ print(Opt_Forms_Dict['Government Integrity'].Equation_String)
 print(Opt_Forms_Dict['Government Integrity'].predict(np.array([0.5,0.30,0.24])))
 print(Opt_Forms_Dict['Government Integrity'].Time_col_name)
 Opt_Form.report()
-e = Opt_Form.Errors
-Opt_Form.Data.columns
-
-sum(abs(e))/sum(Opt_Form.Data[Dep_Var])
 sys.exit()
 # Funcitons with different setups
 Opt_Form.save("test") # Saving summary object (model)
