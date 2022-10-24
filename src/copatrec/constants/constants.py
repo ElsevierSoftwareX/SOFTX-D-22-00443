@@ -5,7 +5,8 @@ Created on Fri Nov 19 12:16:08 2021
 @License: https://creativecommons.org/licenses/by-nc-sa/4.0/
           Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
 @Source: https://github.com/copatrec
-@document: https://github.com/copatrec
+@Document: https://github.com/copatrec
+@WebApp: copatrec.org
 @Cite:
 """
 
@@ -49,7 +50,7 @@ class Warns:
     W102 = "Analysis error: The number of observations are less than 10."
     W103 = "All X values here should be standardized if the model is generated using standardized values."
     #  Result Messages
-    R101 = "Fitted. Model SE: {} and Goodness of Fit: {}"
+    R101 = "Fitted. Model SE: {}"
     R102 = "Done"
 
     #  Progress
@@ -61,9 +62,10 @@ class Warns:
 
     # Summary object warnings
     S100 = 'The optimal regression is selected based on the smallest SE. ' \
-           'However, all forms in which their Goodness of Fit(SE) ' \
-           'is equal to or more than (1-significant_level) are acceptable. ' \
-           'The "Goodness of Fit" is calculated based on SE Intervals.' \
+           'However, the unit of SE is same as variable unit.' \
+           'In the case of standardization, SE becomes ' \
+           'Dimensionless quantity as well ad thus has a range ' \
+           'between 0 and 1.'
 
     S101 = 'Standard error of regression can be used to evaluate' \
            ' linear and nonlinear regressions and is valid if it is less' \

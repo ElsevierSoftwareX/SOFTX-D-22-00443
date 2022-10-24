@@ -6,7 +6,8 @@ Created on Wed Sep  1 10:23:42 2021
 @Email: siamak.khatami@ntnu.no
 @License: https://creativecommons.org/licenses/by-nc-sa/4.0/
 @Source: https://github.com/copatrec
-@document: https://github.com/copatrec
+@Document: https://github.com/copatrec
+@WebApp: copatrec.org
 @Cite:
 """
 import pandas as pd
@@ -22,8 +23,8 @@ except ImportError:
 import matplotlib.pyplot as plt
 plt.rc('axes', titlesize='18')
 plt.rc('axes', labelsize='14')
-data = pd.read_pickle("../data/Data.pkl")
-data = data[['countryname', 'year', 'gdppc', 'Government Integrity']]
+data = pd.read_pickle("../data/GRIN.pkl")
+
 time_Col = 'year'
 category_column = 'countryname'
 Dep_Var = 'gdppc'
@@ -32,7 +33,6 @@ data = data.astype({'gdppc': float,
                     'Government Integrity': float,
                     'year': int,
                     'countryname': str})
-
 SM = Copatrec(data=data,
               dependent_var=Dep_Var,
               category_col=category_column,
@@ -61,22 +61,22 @@ Opt_Form = Opt_Forms_Dict['Government Integrity']
 print(Error_Terms['Government Integrity'])
 print(Opt_Forms_Dict['Government Integrity'].Equation_String)
 # independent variable values should be standardized if the model has been standardized
-print(Opt_Forms_Dict['Government Integrity'].predict(np.array([0.5,0.30,0.24])))
+print(Opt_Forms_Dict['Government Integrity'].predict(np.array([0.5, 0.30, 0.24])))
 print(Opt_Forms_Dict['Government Integrity'].Time_col_name)
 Opt_Form.report()
 sys.exit()
-# Funcitons with different setups
+# Functions with different setups
 Opt_Form.save("test") # Saving summary object (model)
-All_Forms_Dict['Government Integrity']['logistic'].summary_items() # Print items in model object
-All_Forms_Dict['Government Integrity']['logistic'].Data # print dataset
-All_Forms_Dict['Government Integrity']['logistic'].Independent_Var # independent variable name
-All_Forms_Dict['Government Integrity']['logistic'].report() # print a report
-All_Forms_Dict['Government Integrity']['logistic'].help() # print a general help
+All_Forms_Dict['Government Integrity']['logistic'].summary_items()  # Print items in model object
+All_Forms_Dict['Government Integrity']['logistic'].Data  # print dataset
+All_Forms_Dict['Government Integrity']['logistic'].Independent_Var  # independent variable name
+All_Forms_Dict['Government Integrity']['logistic'].report()  # print a report
+All_Forms_Dict['Government Integrity']['logistic'].help()  # print a general help
 
 # loading a summary object (model)
 file = open('test.pickle', 'rb')
 summ = pickle.load(file)
-summ.report() # printing report
+summ.report()  # printing report
 
 
 

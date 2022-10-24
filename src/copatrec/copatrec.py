@@ -5,7 +5,8 @@ Created on Wed Sep  1 12:03:18 2021
 @Email: siamak.khatami@ntnu.no
 @License: https://creativecommons.org/licenses/by-nc-sa/4.0/
 @Source: https://github.com/copatrec
-@document: https://github.com/copatrec
+@Document: https://github.com/copatrec
+@WebApp: copatrec.org
 @Cite:
 """
 import inspect
@@ -946,8 +947,7 @@ class Copatrec:
                                 standardization=standardization, outlier_method=outlier_method,
                                 outliers=outliers, intervals=intervals, epochs=max_epochs,
                                 alpha=alpha, time_series_category=Cat, cross_section_time=CST.ALL)
-                            lg.info(Warns.R101.format(model_summary.SE,
-                                                      model_summary.SE_Fit_Goodness))
+                            lg.info(Warns.R101.format(model_summary.SE))
                             results[func.__name__] = model_summary
                             errs[func.__name__] = None
                             if model_summary.SE < best_se:
@@ -1097,8 +1097,7 @@ class Copatrec:
                                 outliers=outliers, epochs=max_epochs, independent_var=independent_var,
                                 outlier_method=outlier_method,  intervals=intervals, alpha=alpha,
                                 cross_section_time=time, time_series_category=CST.ALL)
-                            lg.info(Warns.R101.format(model_summary.SE,
-                                                      model_summary.SE_Fit_Goodness))  # Log the fitted message
+                            lg.info(Warns.R101.format(model_summary.SE))  # Log the fitted message
                             results[func.__name__] = model_summary  # Save the model_summary
                             errs[func.__name__] = np.nan  # Since everything is ok, no error term.
                             if model_summary.SE < best_se:
@@ -1229,8 +1228,7 @@ class Copatrec:
                             drop_outliers=drop_outliers, outlier_method=outlier_method,
                             outliers=outliers, intervals=intervals, epochs=max_epochs, alpha=alpha,
                             cross_section_time=CST.ALL, time_series_category=CST.ALL)
-                        lg.info(Warns.R101.format(model_summary.SE,
-                                                  model_summary.SE_Fit_Goodness))
+                        lg.info(Warns.R101.format(model_summary.SE))
                         results[func.__name__] = model_summary
                         errs[func.__name__] = np.nan
                         if model_summary.SE < best_se:

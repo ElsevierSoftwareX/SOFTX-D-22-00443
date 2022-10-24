@@ -7,7 +7,8 @@ Created on Fri Nov 19 12:16:08 2021
 @License: https://creativecommons.org/licenses/by-nc-sa/4.0/
           Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
 @Source: https://github.com/copatrec
-@document: https://github.com/copatrec
+@Document: https://github.com/copatrec
+@WebApp: copatrec.org
 @Cite:
 """
 import numpy as np
@@ -154,6 +155,7 @@ class Summary:
         self.DFT = self.N - 1  # Corrected Degrees of Freedom Total
         self.R2adj = 1 - ((1 - self.R2)*self.DFT) / self.Deg_Free
         try:
+            # It can't calculate se_params due to very tiny or null values.
             self.SE_Params = np.sqrt(np.diag(np.abs(self.Covariance_Coefficients)))  # One standard deviation errors
             # In some cases Covariance_Coefficients can contain Nan/negative items
             self.T = self.Coefficients / self.SE_Params
@@ -173,8 +175,9 @@ class Summary:
         self.MSE = self.SSE / self.Deg_Free
         self.R_MSE = np.sqrt(self.MSE)
         self.SE = np.round(np.sqrt(self.SSE/self.Deg_Free), 3)  # Its unit follows independent variable's unit.
-        self.SE_Fit_Goodness = self.__se_coverage()  # Ratio between 0 and 1
-        self.Outlier_Ratio = 1 - self.SE_Fit_Goodness  # Ratio between 0 and 1
+        self.RSE = np.round(np.sum(abs(self.Errors/y_values))/self.N, 3)
+        # self.SE_Fit_Goodness = self.__se_coverage()  # Ratio between 0 and 1
+        # self.Outlier_Ratio = 1 - self.SE_Fit_Goodness  # Ratio between 0 and 1
         # Shapiro test is not good for the big datasets, because the nature of 
         # p_value is to imply that data is not sufficient to prove the distribution.
         # So, Anderson is better one.
@@ -205,6 +208,9 @@ class Summary:
 
     def __se_coverage(self):
         """
+        For now, this is not included in the progress.
+        Indeed, this function can be used as a comparing criteria between
+        two models, not an independent measurement criteria.
         How many percentages of data points fall within SE intervals?
         The percentage should be equal or larger than (1-alpha)
         :return: A percentage
@@ -269,8 +275,8 @@ class Summary:
                              ("Deg.Freedom:", self.Deg_Free))
             self.__print2col(("Standardized:", self.Standardization),
                              ("Significance Level:", self.Alpha))
-            self.__print2col(("SE:", round(self.SE, 3)),
-                             (" ", " "))
+            self.__print2col(("SE:", self.SE),
+                             ("RSE:", self.RSE))
             print(''.center(align, '='))
             # ==========================================
             # Note 1

@@ -7,7 +7,8 @@ Created on Tue Sep  7 19:46:15 2021
 @License: https://creativecommons.org/licenses/by-nc-sa/4.0/
           Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)
 @Source: https://github.com/copatrec
-@document: https://github.com/copatrec
+@Document: https://github.com/copatrec
+@WebApp: copatrec.org
 """
 
 import setuptools
@@ -21,7 +22,7 @@ with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
 
 setuptools.setup(
     name="copatrec",
-    version="0.1.2",
+    version="0.0.1",
     author="Siamak Khatami",
     author_email="<siamak.khatami@ntnu.no>",
     description="Correlation pattern recognizer (Copatrec), a package to find "

@@ -5,6 +5,13 @@ INFO - variable gdppc done.
 INFO - variable Government Integrity started.
 INFO - variable Government Integrity done.
 INFO - **********Outliers processed.***********
+INFO - *****Finding outliers for a Panel analysis, Method:beta*****
+WARNING - It is highly recommended to drop outliers by an expert of the field.
+INFO - variable gdppc started.
+INFO - variable gdppc done.
+INFO - variable Government Integrity started.
+INFO - variable Government Integrity done.
+INFO - **********Outliers processed.***********
 INFO - ===X: gdppc, Y: Government Integrity====
 INFO - ******************sin*******************
 INFO - Fitted. Model SE: 0.091
@@ -34,5 +41,32 @@ INFO - ***********oscillating_growth***********
 INFO - Fitted. Model SE: 0.086
 INFO - ************double_gaussian*************
 INFO - Fitted. Model SE: 0.091
-  warnings.warn(Warns.W103)
-
+INFO - ===X: gdppc, Y: Government Integrity====
+INFO - ******************sin*******************
+INFO - Fitted. Model SE: 0.091
+INFO - ******************sinh******************
+INFO - Fitted. Model SE: 0.094
+INFO - ******************cos*******************
+INFO - Fitted. Model SE: 0.091
+INFO - ******************cosh******************
+INFO - Fitted. Model SE: 0.096
+INFO - ******************tan*******************
+INFO - Fitted. Model SE: 0.168
+INFO - ******************tanh******************
+INFO - Fitted. Model SE: 0.101
+INFO - ******************lnx*******************
+INFO - Fitted. Model SE: 0.128
+INFO - ******************logx******************
+INFO - Fitted. Model SE: 0.128
+INFO - ***************euler_exp****************
+INFO - Fitted. Model SE: 0.093
+INFO - ******************exp*******************
+INFO - Fitted. Model SE: 0.093
+INFO - ****************logistic****************
+INFO - Fitted. Model SE: 0.09
+INFO - ***************polynomial***************
+INFO - Fitted. Model SE: 0.092
+INFO - ***********oscillating_growth***********
+INFO - Fitted. Model SE: 0.086
+INFO - ************double_gaussian*************
+INFO - Fitted. Model SE: 0.091
