@@ -51,7 +51,7 @@ SM = Copatrec(data=data,
               category_col=category_column,
               time_col=time_Col,
               report=True,
-              report_to_file=True)
+              report_to_file=False)
 
 # Reproducing Figure 4 in the paper
 # Running panel_outliers function
@@ -114,7 +114,10 @@ All_Forms_Dict2['Government Integrity']['logistic'].plot(show_outliers=True,
 # Appendix C
 All_Forms_Dict1['Government Integrity']['oscillating_growth'].report()
 
-################ EXTRA
+#                   EXTRA commands                   #
+exit() # To run the below commands, please remove this line
+
+Opt_Forms_Dict1['Government Integrity'].save("test")
 # loading a result object (model)
 file = open('test.pickle', 'rb')
 res = pickle.load(file)
