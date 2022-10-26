@@ -12,9 +12,9 @@ Created on Mon Oct 24 10:23:42 2022
 """
 # Importing packages
 import pandas as pd
-import numpy as np
 import pickle
 import sys
+
 try:
     from copatrec import Copatrec  # If package is installed
 except ImportError:
@@ -115,7 +115,7 @@ All_Forms_Dict2['Government Integrity']['logistic'].plot(show_outliers=True,
 All_Forms_Dict1['Government Integrity']['oscillating_growth'].report()
 
 #                   EXTRA commands                   #
-exit() # To run the below commands, please remove this line
+sys.exit() # To run the below commands, please remove this line
 
 Opt_Forms_Dict1['Government Integrity'].save("test")
 # loading a result object (model)
