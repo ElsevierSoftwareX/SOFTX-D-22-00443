@@ -38,6 +38,14 @@ data = data.astype({'gdppc': float,
 time_Col = 'year'
 category_column = 'countryname'
 Dep_Var = 'gdppc'
+
+# report = true is not related to the report function of copatrec.
+# it only sets weather a log of current progress should be generated or not.
+# report_to_file=True will produce no log output in the terminal.
+# To see the progress in the terminal first set
+# report = true
+# report_to_file=True
+
 SM = Copatrec(data=data,
               dependent_var=Dep_Var,
               category_col=category_column,
@@ -106,3 +114,8 @@ All_Forms_Dict2['Government Integrity']['logistic'].plot(show_outliers=True,
 # Appendix C
 All_Forms_Dict1['Government Integrity']['oscillating_growth'].report()
 
+################ EXTRA
+# loading a result object (model)
+file = open('test.pickle', 'rb')
+res = pickle.load(file)
+res.report()  # printing report

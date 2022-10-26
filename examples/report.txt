@@ -1,5 +1,5 @@
 ################################################################################
-                               Regression Summary                               
+                               Regression Result
 ================================================================================
 Data Type:                      Panel      Equation:          oscillating_growth
 Dep.Var                         gdppc      Independent.Var: Government Integrity

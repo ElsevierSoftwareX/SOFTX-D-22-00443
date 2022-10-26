@@ -26,7 +26,7 @@ except ImportError:
     from src.constants.constants import CST, Errs, Warns
 
 
-class SumHelp:
+class ResultHelp:
     def __init__(self):
         self.Data = ': Processed data including estimated values'
         self.Reg_Type = ': Regression Type'
@@ -79,9 +79,9 @@ class SumHelp:
         self.Error_Stats = ': Statistically analysis of Errors'
 
 
-class Summary:
+class Result:
     """
-    It could be possible to define the summary class as a Data Classes, but maybe later
+    It could be possible to define the result class as a Data Classes, but maybe later
     Many things should be rearranged.
     We also don't want to put all arguments in the object information
     """
@@ -106,7 +106,7 @@ class Summary:
                  time_series_category: str = ""):
 
         """
-        A summary object which holds reports about the fitted model ane related data
+        A result object which holds reports about the fitted model ane related data
         :param data: A pd.Dataframe including all X and Y and estimated Ys
         :param coefficients: an array of estimated coefficients
         :param covariance_coefficients: Covariance of estimated coefficients
@@ -224,17 +224,17 @@ class Summary:
         # True(1) for points that are in boundaries and False(0) for rest.
         return round(sum(points_within_intervals) / len(points_within_intervals), 3)
 
-    def summary_items(self,
-                      keys: list = None):
+    def result_items(self,
+                     keys: list = None):
 
         """
-        summary_items() prints the list of items in the summary object with their descriptions
+        result_items() prints the list of items in the result object with their descriptions
         :param keys: (optional) a list of items can be passed to check their description
         Otherwise, that would be a full list.
         :type: list
         """
 
-        content_help = SumHelp()
+        content_help = ResultHelp()
         report_dic = content_help.__dict__
         if keys:
             report_dic = {key: content_help.__dict__[key] for key in keys}
@@ -248,8 +248,8 @@ class Summary:
         This function prints a report of the model.
         If no argument pass to the function, it will show a full report
         Otherwise, it will print requested items. To see the list of items
-        you can use summary_items() function
-        :param keys: a list of keys in the summary-object
+        you can use result_items() function
+        :param keys: a list of keys in the result-object
         :type: list
         """
 
@@ -261,8 +261,8 @@ class Summary:
             align = 80
             print(''.center(align, '#'))
             ###########################################
-            print('Regression Summary'.center(align))
-            #           Regression Summary            #
+            print('Regression Result'.center(align))
+            #           Regression Result            #
             print(''.center(align, '='))
             # ==========================================
             self.__print2col(("Data Type:", self.Reg_Type),
@@ -335,16 +335,16 @@ class Summary:
     @staticmethod
     def help():
         """
-        help() function of the summary object prints an overview of functions and items in the
-        summary object.
+        help() function of the result object prints an overview of functions and items in the
+        result object.
         """
         help_dic = {
             'report()': 'Prints full report of the results.',
             'report(list of keys)': 'Prints report of the regression'
                                     ' for the given list of items',
-            'summary_items': 'Prints a list of items inside the summary object '
+            'result_items': 'Prints a list of items inside the result object '
                              'that can be called via report(list of keys) or directly'
-                             'by summary_object.item_name like summary_object.Independent_Var',
+                             'by result_object.item_name like result_object.Independent_Var',
             'save(file name)': 'This function adds a pickle to the end of the name and saves the'
                                'file. To load the file you can use pickle package.',
             'plot(args)': 'will plot the X, Y and fitted line(predicted Ys) on a scatter plot.',
@@ -454,7 +454,7 @@ class Summary:
         """
         TODO: Parametrize figure size
         TODO: New Feature: plot time_series or cross_sectional beside panel plot to show bigger and smaller scale
-        This function plots the result of analysis using the summary object;
+        This function plots the result of analysis using the result object;
         :param show_time_label: Weather to show the labels of the times on the plot
         Only works if the regression type is panel or time_series
         :param show_category_label: Weather to show the labels of the categories on the plot
@@ -559,7 +559,7 @@ class Summary:
     def save(self,
              name: str):
         """
-        save function receives a name of file and saves the summary object in the repo
+        save function receives a name of file and saves the result object in the repo
         The file would be in a pkl (pickle) format
         :param name: The name of file
         """

@@ -60,7 +60,7 @@ class Warns:
     #  Equation Forms
     EF101 = 'Warning: Here xb equation Represents tanh.'
 
-    # Summary object warnings
+    # Result object warnings
     S100 = 'The optimal regression is selected based on the smallest SE. ' \
            'However, the unit of SE is same as variable unit.' \
            'In the case of standardization, SE becomes ' \

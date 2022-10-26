@@ -860,9 +860,9 @@ class Copatrec:
         on the available categories in the data set and selects all values for all available times.
         Then using machine learning curve_fit() function of scipy package, it fits the different
         equation forms to find the complex patters.
-        As the result, for each fitting process it returns a summary object that can be accessed from the
+        As the result, for each fitting process it returns a result object that can be accessed from the
         returned dictionaries based on the dictionary structures(see "Returns" section).
-        To see the contents of the summary object summary_object.help() can be used.
+        To see the contents of the result object summary_object.help() can be used.
         To read more about the complex forms and their
         relevant equation forms and examples of this function, please refer to the GitHub page;
         :param max_epochs: Maximum number of iterations the Ml optimizer should try to re-adjust
@@ -883,13 +883,13 @@ class Copatrec:
         :param outlier_method: The method name to be used for analysis of outliers;
         beta, normal or IQR
         :return:
-        Optimum form dictionary[independent variable][category] = summary object
-        All forms' dictionary[independent variable][category][equation form name] = summary object
+        Optimum form dictionary[independent variable][category] = result object
+        All forms' dictionary[independent variable][category][equation form name] = result object
         Error terms' dictionary [independent variable][category][equation form name] = Main Error
         """
         opt_forms_dict = dict()  # This will hold and return optimal equation forms
         # dict[independent variable][category]
-        all_forms_dict = dict()  # This holds all summary objects
+        all_forms_dict = dict()  # This holds all result objects
         # dict[independent variable][category][equation form]
         error_terms = dict()  # This holds all error terms relevant to the fitting process.
         # dict[independent variable][category][equation form]
@@ -910,7 +910,7 @@ class Copatrec:
                                              self.Dependent_var, independent_var]]
             cat_best_func = dict()  # Init a dict to save best function of the current variable set and categories
             cats_results = dict()  # cats_results[cat] = results[equation form]
-            # Init dict to save summary objects of the categories
+            # Init dict to save result objects of the categories
             cats_errs = dict()  # cats_errs[cat] = errs[equation form]
             # Init dict for saving categories' error terms
             cat_groups = this_independent_dt.groupby(self.Category_col)  # Grouping the data set based on categories
@@ -993,7 +993,7 @@ class Copatrec:
             # cat_best_func[Cats]; because there is one cat_best_func per cat
             all_forms_dict[independent_var] = cats_results  # cats_results[cats][equations]
             error_terms[independent_var] = cats_errs  # cats_errs[cats][equations]
-        return opt_forms_dict, all_forms_dict, error_terms  # data is provided in the summary object
+        return opt_forms_dict, all_forms_dict, error_terms  # data is provided in the result object
 
     def cross_sectional(self,
                         max_epochs: int = 8000,
@@ -1013,9 +1013,9 @@ class Copatrec:
         on the available categories in the data set and selects all values for all available times.
         Then using machine learning curve_fit() function of scipy package, it fits the different
         equation forms to find the complex patters.
-        As the result, for each fitting process it returns a summary object that can be accessed from the
+        As the result, for each fitting process it returns a result object that can be accessed from the
         returned dictionaries based on the dictionary structures(see "Returns" section).
-        To see the contents of the summary object summary_object.help() can be used.
+        To see the contents of the result object summary_object.help() can be used.
         To read more about the complex forms and their
         relevant equation forms and examples of this function, please refer to the GitHub page;
         :param max_epochs: Maximum number of iterations the Ml optimizer should try to re-adjust
@@ -1036,8 +1036,8 @@ class Copatrec:
         :param outlier_method: The method name to be used for analysis of outliers;
         beta, normal or IQR
         :return:
-        Optimum form dictionary[independent variable][category] = summary object
-        All forms' dictionary[independent variable][category][equation form name] = summary object
+        Optimum form dictionary[independent variable][category] = result object
+        All forms' dictionary[independent variable][category][equation form name] = result object
         Error terms' dictionary [independent variable][category][equation form name] = Main Error
         """
         opt_forms_dict = dict()  # This will hold and return optimal equation forms
@@ -1061,7 +1061,7 @@ class Copatrec:
                                              independent_var]]
             time_best_func = dict()  # Init a dict to save best function of the current variable set and times
             time_results = dict()  # time_results[time] = results[equation form]
-            # Init dict to save summary objects of the different times
+            # Init dict to save result objects of the different times
             time_errs = dict()   # cats_errs[time] = errs[equation form]
             # Init dict for saving times' error terms
             time_groups = this_independent_dt.groupby(self.Time_col)  # Grouping the data set based on times
@@ -1160,9 +1160,9 @@ class Copatrec:
         function of scipy package, it fits the different equation forms to find the complex patters for all data.
         It should be noted that, in general, because of a big characteristics of different categories
         in different data set it is recommended to analysis the data in panel mode with a team member who is
-        the expert in the field. As the result, for each fitting process it returns a summary object that can be
+        the expert in the field. As the result, for each fitting process it returns a result object that can be
         accessed from the returned dictionaries based on the dictionary structures(see "Returns" section).
-        To see the contents of the summary object summary_object.help() can be used.
+        To see the contents of the result object summary_object.help() can be used.
         To read more about the complex forms and their
         relevant equation forms and examples of this function, please refer to the GitHub page;
         >>The structure of returned data is different from time_series and cross_sectional functions
@@ -1180,8 +1180,8 @@ class Copatrec:
         :param outlier_method: The method name to be used for analysis of outliers;
         beta, normal or IQR
         :return:
-        Optimum form dictionary[independent variable] = summary object
-        All forms' dictionary[independent variable][equation form name] = summary object
+        Optimum form dictionary[independent variable] = result object
+        All forms' dictionary[independent variable][equation form name] = result object
         Error terms' dictionary [independent variable][equation form name] = Main Error
         """
         opt_forms_dict = dict()  # opt_forms_dict[independent variable]
@@ -1285,7 +1285,7 @@ class Copatrec:
         """
         This function tries to fit data on received equation form using curve_fit() function of scipy.
         The curve_fit is using ML techniques to fit the equation, not OLS.
-        Som of these parameters only are called to be passed to the Summary object
+        Som of these parameters only are called to be passed to the Result object
         :param data: a pd.DataFrame including dependent, independent and relevant time and category columns
         :param func: a Callable function which represents equation form
         :param reg_type: Regression type to fit; panel, time_series or cross_sectional
@@ -1306,7 +1306,7 @@ class Copatrec:
         A nested list of estimated covariance of the coefficients |
         The input DataFrame plus estimated values for the fitted model.
         the column of the estimated values are [independent variable name + equation form name] |
-        The summary object of the fitted equation form.
+        The result object of the fitted equation form.
         """
         x = data[independent_var]
         y = data[self.Dependent_var]
@@ -1338,7 +1338,7 @@ class Copatrec:
         #     data = data.sort_values(self.Time_col)
         # else:
         data = data.sort_values(by=independent_var)
-        # Create the Summary object
+        # Create the Result object
         model_summary = Summary(data=data, coefficients=popt,
                                 covariance_coefficients=p_cov, func=func,
                                 equ_patterns=self.__EquPatterns, reg_type=reg_type, independent_var=independent_var,

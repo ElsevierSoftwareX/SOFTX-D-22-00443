@@ -33,6 +33,14 @@ data = data.astype({'gdppc': float,
                     'Government Integrity': float,
                     'year': int,
                     'countryname': str})
+
+# report = true is not related to the report function of copatrec.
+# it only sets weather a log of current progress should be generated or not.
+# report_to_file=True will produce no log output in the terminal.
+# To see the progress in the terminal first set
+# report = true
+# report_to_file=True
+
 SM = Copatrec(data=data,
               dependent_var=Dep_Var,
               category_col=category_column,
@@ -66,17 +74,17 @@ print(Opt_Forms_Dict['Government Integrity'].Time_col_name)
 Opt_Form.report()
 sys.exit()
 # Functions with different setups
-Opt_Form.save("test") # Saving summary object (model)
-All_Forms_Dict['Government Integrity']['logistic'].summary_items()  # Print items in model object
+Opt_Form.save("test") # Saving result object (model)
+All_Forms_Dict['Government Integrity']['logistic'].result_items()  # Print items in model object
 All_Forms_Dict['Government Integrity']['logistic'].Data  # print dataset
 All_Forms_Dict['Government Integrity']['logistic'].Independent_Var  # independent variable name
 All_Forms_Dict['Government Integrity']['logistic'].report()  # print a report
 All_Forms_Dict['Government Integrity']['logistic'].help()  # print a general help
 
-# loading a summary object (model)
+# loading a result object (model)
 file = open('test.pickle', 'rb')
-summ = pickle.load(file)
-summ.report()  # printing report
+res = pickle.load(file)
+res.report()  # printing report
 
 
 
