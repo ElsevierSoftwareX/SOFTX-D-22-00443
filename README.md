@@ -31,6 +31,7 @@ preferred approaches.
 # Examples
 
 The examples folder can be found under in the GitHub repo. Its direct URL is:
+https://github.com/copatrec/copatrec/tree/master/examples
 
 ## JSS.py
 An example file with setups to reproducing paper results for the Journal of Statistical Software.
