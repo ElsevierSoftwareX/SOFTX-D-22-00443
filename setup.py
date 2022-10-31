@@ -22,7 +22,7 @@ with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
 
 setuptools.setup(
     name="copatrec",
-    version="0.0.1",
+    version="0.0.2",
     author="Siamak Khatami",
     author_email="<siamak.khatami@ntnu.no>",
     description="Correlation pattern recognizer (Copatrec), a package to find "

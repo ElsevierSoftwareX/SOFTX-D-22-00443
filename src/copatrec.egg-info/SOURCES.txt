@@ -13,5 +13,5 @@ src/copatrec/constants/__init__.py
 src/copatrec/constants/constants.py
 src/copatrec/math/__init__.py
 src/copatrec/math/patterns.py
-src/copatrec/summary/__init__.py
-src/copatrec/summary/summary.py
+src/copatrec/result/__init__.py
+src/copatrec/result/result.py
