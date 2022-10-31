@@ -1405,3 +1405,7 @@ class Copatrec:
             if d.empty:
                 lg.error(Errs.E203)
             return d
+
+# TODO 3: Save standardized data in the data set and retrieve from there. Just do standardization if it is not in the
+# data set.
+
