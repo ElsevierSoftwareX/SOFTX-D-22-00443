@@ -25,12 +25,12 @@ from sklearn.preprocessing import MinMaxScaler
 try:
     #  If package is cloned.
     from src.math.patterns import _EquFuncs, _EquPatterns
-    from src.summary.summary import Summary
+    from src.result.result import Result
     from src.constants.constants import CST, Warns, Errs
 except ImportError:
     #  If package is installed
     from copatrec.math.patterns import _EquFuncs, _EquPatterns
-    from copatrec.summary.summary import Summary
+    from copatrec.result.result import Result
     from copatrec.constants.constants import CST, Warns, Errs
 
 class Copatrec:
