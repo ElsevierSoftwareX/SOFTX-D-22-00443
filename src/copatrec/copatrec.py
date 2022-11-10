@@ -862,7 +862,7 @@ class Copatrec:
         equation forms to find the complex patters.
         As the result, for each fitting process it returns a result object that can be accessed from the
         returned dictionaries based on the dictionary structures(see "Returns" section).
-        To see the contents of the result object summary_object.help() can be used.
+        To see the contents of the result object result_object.help() can be used.
         To read more about the complex forms and their
         relevant equation forms and examples of this function, please refer to the GitHub page;
         :param max_epochs: Maximum number of iterations the Ml optimizer should try to re-adjust
@@ -932,7 +932,7 @@ class Copatrec:
 
                 this_cat = this_cat.sort_index(level=[self.Time_col])
                 best_se = np.inf  # Any SE less than current should be replaced
-                results = dict()  # A dict to store summary_objects in the results.
+                results = dict()  # A dict to store result_objects in the results.
                 errs = dict()  # Dictionary of the errors to return further
                 if this_cat.shape[0] > 10:  # Do analysis if it is more than 10 rows
                     for func in self.Models:  # iterating over the function in the class
@@ -941,22 +941,22 @@ class Copatrec:
                             # Try to fit the data and receive the results
                             # popt stands for the coefficients
                             # p_cov stands for the covariance of the coefficients
-                            popt, p_cov, this_cat, model_summary = self.__fit_model(
+                            popt, p_cov, this_cat, model_result = self.__fit_model(
                                 data=this_cat, func=func, reg_type=CST.Time_Series,
                                 independent_var=independent_var, drop_outliers=drop_outliers,
                                 standardization=standardization, outlier_method=outlier_method,
                                 outliers=outliers, intervals=intervals, epochs=max_epochs,
                                 alpha=alpha, time_series_category=Cat, cross_section_time=CST.ALL)
-                            lg.info(Warns.R101.format(model_summary.SE))
-                            results[func.__name__] = model_summary
+                            lg.info(Warns.R101.format(model_result.SE))
+                            results[func.__name__] = model_result
                             errs[func.__name__] = None
-                            if model_summary.SE < best_se:
+                            if model_result.SE < best_se:
                                 # setting the best function
-                                best_se = model_summary.SE
-                                cat_best_func[Cat] = model_summary
+                                best_se = model_result.SE
+                                cat_best_func[Cat] = model_result
                             if plot and not plot_only_best:
                                 # to plot the best, we have to wait to end the loop
-                                model_summary.plot(show_time_label=show_time_label,
+                                model_result.plot(show_time_label=show_time_label,
                                                    show_outliers=show_outliers,
                                                    plot_predicted_outliers=plot_predicted_outliers)
                         except Exception as e:
@@ -1015,7 +1015,7 @@ class Copatrec:
         equation forms to find the complex patters.
         As the result, for each fitting process it returns a result object that can be accessed from the
         returned dictionaries based on the dictionary structures(see "Returns" section).
-        To see the contents of the result object summary_object.help() can be used.
+        To see the contents of the result object result_object.help() can be used.
         To read more about the complex forms and their
         relevant equation forms and examples of this function, please refer to the GitHub page;
         :param max_epochs: Maximum number of iterations the Ml optimizer should try to re-adjust
@@ -1081,7 +1081,7 @@ class Copatrec:
                                                  outliers=current_outliers)
 
                 best_se = np.inf   # Any SE less than current should be replaced
-                results = dict()  # A dict to store summary_objects in the results.
+                results = dict()  # A dict to store result_objects in the results.
                 errs = dict()  # Dictionary of the errors to return further
                 # related to the category
                 if this_time.shape[0] > 10:  # If N data is more than 10 do analysis
@@ -1091,22 +1091,22 @@ class Copatrec:
                             # Try to fit the data and receive the results
                             # popt stands for the coefficients
                             # p_cov stands for the covariance of the coefficients
-                            popt, p_cov, this_time, model_summary = self.__fit_model(
+                            popt, p_cov, this_time, model_result = self.__fit_model(
                                 data=this_time, func=func, reg_type=CST.Cross_Sectional,
                                 standardization=standardization, drop_outliers=drop_outliers,
                                 outliers=outliers, epochs=max_epochs, independent_var=independent_var,
                                 outlier_method=outlier_method,  intervals=intervals, alpha=alpha,
                                 cross_section_time=time, time_series_category=CST.ALL)
-                            lg.info(Warns.R101.format(model_summary.SE))  # Log the fitted message
-                            results[func.__name__] = model_summary  # Save the model_summary
+                            lg.info(Warns.R101.format(model_result.SE))  # Log the fitted message
+                            results[func.__name__] = model_result  # Save the model_result
                             errs[func.__name__] = np.nan  # Since everything is ok, no error term.
-                            if model_summary.SE < best_se:
+                            if model_result.SE < best_se:
                                 # If this models.se is <best_se then this is the best_se
-                                best_se = model_summary.SE
-                                time_best_func[time] = model_summary
+                                best_se = model_result.SE
+                                time_best_func[time] = model_result
                             if plot and not plot_only_best:
                                 # IF it is asked to plot all equation forms for all time and independent variable
-                                model_summary.plot(show_category_label=show_category_label,
+                                model_result.plot(show_category_label=show_category_label,
                                                    show_outliers=show_outliers,
                                                    plot_predicted_outliers=plot_predicted_outliers)
                         except Exception as e:
@@ -1162,7 +1162,7 @@ class Copatrec:
         in different data set it is recommended to analysis the data in panel mode with a team member who is
         the expert in the field. As the result, for each fitting process it returns a result object that can be
         accessed from the returned dictionaries based on the dictionary structures(see "Returns" section).
-        To see the contents of the result object summary_object.help() can be used.
+        To see the contents of the result object result_object.help() can be used.
         To read more about the complex forms and their
         relevant equation forms and examples of this function, please refer to the GitHub page;
         >>The structure of returned data is different from time_series and cross_sectional functions
@@ -1222,25 +1222,25 @@ class Copatrec:
                         # Try to fit the data and receive the results
                         # popt stands for the coefficients
                         # p_cov stands for the covariance of the coefficients
-                        popt, p_cov, this_independent_dt, model_summary = self.__fit_model(
+                        popt, p_cov, this_independent_dt, model_result = self.__fit_model(
                             data=this_independent_dt, func=func, reg_type=CST.Panel,
                             standardization=standardization, independent_var=independent_var,
                             drop_outliers=drop_outliers, outlier_method=outlier_method,
                             outliers=outliers, intervals=intervals, epochs=max_epochs, alpha=alpha,
                             cross_section_time=CST.ALL, time_series_category=CST.ALL)
-                        lg.info(Warns.R101.format(model_summary.SE))
-                        results[func.__name__] = model_summary
+                        lg.info(Warns.R101.format(model_result.SE))
+                        results[func.__name__] = model_result
                         errs[func.__name__] = np.nan
-                        if model_summary.SE < best_se:
+                        if model_result.SE < best_se:
                             # IF the SE of current model is better than best_se
                             # Then current model is the best until now.
-                            best_se = model_summary.SE
-                            opt_forms_dict[independent_var] = model_summary
+                            best_se = model_result.SE
+                            opt_forms_dict[independent_var] = model_result
                         if plot:
                             if not drop_outliers:
                                 show_outliers = False
                             try:
-                                model_summary.plot(show_time_label=show_time_label,
+                                model_result.plot(show_time_label=show_time_label,
                                                    show_category_label=show_category_label,
                                                    show_outliers=show_outliers,
                                                    plot_predicted_outliers=plot_predicted_outliers)
@@ -1281,7 +1281,7 @@ class Copatrec:
                     alpha: float = 0.05,
                     cross_section_time: str = "",
                     time_series_category: str = "") -> \
-            (list, list, pd.DataFrame, Summary):
+            (list, list, pd.DataFrame, Result):
         """
         This function tries to fit data on received equation form using curve_fit() function of scipy.
         The curve_fit is using ML techniques to fit the equation, not OLS.
@@ -1339,7 +1339,7 @@ class Copatrec:
         # else:
         data = data.sort_values(by=independent_var)
         # Create the Result object
-        model_summary = Summary(data=data, coefficients=popt,
+        model_result = Result(data=data, coefficients=popt,
                                 covariance_coefficients=p_cov, func=func,
                                 equ_patterns=self.__EquPatterns, reg_type=reg_type, independent_var=independent_var,
                                 dependent_var=self.Dependent_var, standardization=standardization,
@@ -1347,7 +1347,7 @@ class Copatrec:
                                 drop_outliers=drop_outliers, outlier_method=outlier_method,
                                 outliers=outliers, intervals=intervals, alpha=alpha,
                                 cross_section_time=cross_section_time, time_series_category=time_series_category)
-        return popt, p_cov, data, model_summary
+        return popt, p_cov, data, model_result
 
     def __preprocessing(self,
                         data: pd.DataFrame,
