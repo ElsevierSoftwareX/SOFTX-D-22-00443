@@ -126,6 +126,11 @@ class Result:
         :param cross_section_time: The list of times related to the cross_sectional study
         :param time_series_category: The list of categories related to the time_series study
         """
+        # TODO (Function Domain and Range Report): Is the equation validated if yes (what are domains and ranges)
+        #  if no, is it verified (for example for GDPPC you can use GDP/population and this makes sense), but for
+        #  the GDP's equation, you can't say it comes from sky, and if you are using other resources, you may report
+        #  its domain, range and error?
+        #
         self.Data = data
         self.Reg_Type = reg_type
         self.Independent_Var = independent_var

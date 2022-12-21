@@ -55,8 +55,8 @@ SM = Copatrec(data=data,
 
 # Reproducing Figure 4 in the paper
 # Running panel_outliers function
-# Figure 4 (a) => First plot
-# Figure 4 (b) => Third plot
+# Figure 4 (a) => First output plot
+# Figure 4 (b) => Third output plot
 intervals, outliers = SM.panel_outliers(method='beta',
                                         plot_pairs=True,
                                         plot_hists=True,
@@ -99,23 +99,21 @@ Opt_Forms_Dict2, All_Forms_Dict2, Error_Terms2 = SM.panel(max_epochs=8000,
 All_Forms_Dict2['Government Integrity']['logistic'].plot(show_outliers=True,
                                                          plot_predicted_outliers=True)
 
-# Appendix B
-# By running the above code, a file "JSS.log" will be created in the same repository of current file
-# which holds the log output similar to the "Appendix B. Sample of log file content" in the paper.
 
-# Appendix B
+# By running the above code, a file "SoftwareX.log" will be created in the same repository of current file.
+
+
 # In line 40 and considering:
 # report=True,
 # report_to_file=True
 
-# By running the above code, a file "JSS.log" will be created in the same repository of current file
-# which holds the log output similar to the "Appendix B. Sample of log file content" in the paper.
+# By running the above code, a file "SoftwareX.log" will be created in the same repository of current file.
 
 # Appendix C
 All_Forms_Dict1['Government Integrity']['oscillating_growth'].report()
 
 #                   EXTRA commands                   #
-sys.exit() # To run the below commands, please remove this line
+sys.exit()  # To run the below commands, please remove this line
 
 Opt_Forms_Dict1['Government Integrity'].save("test")
 # loading a result object (model)
