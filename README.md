@@ -28,14 +28,17 @@ preferred approaches.
 - scipy
 - sklearn
 
+## Web application (On progress)
+www.copatrec.org
+
 # Examples
 
 The "examples" folder can be found under the GitHub repo. Its direct URL is:
 
 https://github.com/copatrec/copatrec/tree/master/examples
 
-## JSS.py
-An example file with setups to reproduce paper results for the Journal of Statistical Software.
+## SoftwareX.py
+An example file with setups to reproduce paper results for SoftwareX journal.
 
 ## Tutorial files
 There are two files in different formats (.py and .ipynb). For a detailed tutorial on Copatrec, the Jupyter
