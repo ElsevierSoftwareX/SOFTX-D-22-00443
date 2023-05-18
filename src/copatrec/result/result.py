@@ -126,11 +126,6 @@ class Result:
         :param cross_section_time: The list of times related to the cross_sectional study
         :param time_series_category: The list of categories related to the time_series study
         """
-        # TODO (Function Domain and Range Report): Is the equation validated if yes (what are domains and ranges)
-        #  if no, is it verified (for example for GDPPC you can use GDP/population and this makes sense), but for
-        #  the GDP's equation, you can't say it comes from sky, and if you are using other resources, you may report
-        #  its domain, range and error?
-        #
         self.Data = data
         self.Reg_Type = reg_type
         self.Independent_Var = independent_var
@@ -457,8 +452,6 @@ class Result:
              show_outliers: bool = False,
              plot_predicted_outliers: bool = False):
         """
-        TODO: Parametrize figure size
-        TODO: New Feature: plot time_series or cross_sectional beside panel plot to show bigger and smaller scale
         This function plots the result of analysis using the result object;
         :param show_time_label: Weather to show the labels of the times on the plot
         Only works if the regression type is panel or time_series

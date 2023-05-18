@@ -26,7 +26,7 @@ preferred approaches.
 - NumPy
 - pandas
 - scipy
-- sklearn
+- scikit-learn
 
 ## Web application (On progress)
 www.copatrec.org

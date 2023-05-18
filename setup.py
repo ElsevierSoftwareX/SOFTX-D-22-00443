@@ -32,7 +32,7 @@ setuptools.setup(
     install_requires=['pandas',
                       'numpy',
                       'matplotlib',
-                      'sklearn',
+                      'scikit-learn',
                       'scipy'],
     classifiers=[
         "Programming Language :: Python :: 3.6",

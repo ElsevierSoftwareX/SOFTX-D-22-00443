@@ -49,14 +49,14 @@ SM = Copatrec(data=data,
               report_to_file=True)
 
 intervals, outliers = SM.panel_outliers(method='beta', 
-                                        plot_pairs = True, 
-                                        plot_hists = True, 
+                                        plot_pairs = False, 
+                                        plot_hists = False, 
                                         plot_outliers_name=True)
 
 Opt_Forms_Dict, All_Forms_Dict, Error_Terms = SM.panel(max_epochs=8000,
                                                        alpha=0.05,
                                                        standardization=True,
-                                                       plot=True,
+                                                       plot=False,
                                                        show_time_label=False,
                                                        show_category_label=False,
                                                        drop_outliers=False,

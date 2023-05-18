@@ -34,5 +34,6 @@ INFO - ***********oscillating_growth***********
 INFO - Fitted. Model SE: 0.086
 INFO - ************double_gaussian*************
 INFO - Fitted. Model SE: 0.091
+WARNING - E:\OneDrive\OneDrive - NTNU\PhD\Research\Copatrec Project\copatrec\examples\../src\copatrec\result\result.py:451: UserWarning: All X values here should be standardized if the model is generated using standardized values.
   warnings.warn(Warns.W103)
 

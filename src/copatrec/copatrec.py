@@ -33,10 +33,12 @@ except ImportError:
     from copatrec.result.result import Result
     from copatrec.constants.constants import CST, Warns, Errs
 
+
 class Copatrec:
     def __init__(self,
                  data: pd.DataFrame,
                  dependent_var: str,
+                 independent_vars: list = [],
                  time_col: str = "",
                  category_col: str = "",
                  report: bool = True,
@@ -48,6 +50,8 @@ class Copatrec:
         :type: pd.DataFrame
         :param dependent_var: The column name in the dataframe which represents dependent variable.
         :type: str
+        :param independent_vars: The column names in the dataframe which represents independent variables.
+        :type: list[str]
         :param time_col:  The column name in the dataframe which represents time information.
         :type: str
         :param category_col: The column name in the dataframe which represents categories names.
@@ -82,6 +86,7 @@ class Copatrec:
         self.Data = data
         self.Time_col = time_col
         self.Category_col = category_col
+        self.Independent_vars = independent_vars
 
         if not self.Category_col:  # A column name is added if there is no col
             # the default category name
@@ -94,11 +99,12 @@ class Copatrec:
             #       self.Data[self.Time_col].at[self.Data[self.Category_col] == col] = list(
             #       range(self.Data[self.Time_col].at[self.Data[self.Category_col] == col].shape[0]))
         self.Dependent_var = dependent_var
-        self.Independent_var = [var for var in self.Data.columns if var not in [
-            self.Time_col,
-            self.Category_col,
-            self.Dependent_var
-        ]]  # All columns excepts dependent variable, time and category columns are counted as independent variable.
+        if not self.Independent_vars:  # If there is no column specified, then loop over all remaining columns.
+            self.Independent_vars = [var for var in self.Data.columns if var not in [
+                self.Time_col,
+                self.Category_col,
+                self.Dependent_var
+            ]]  # All columns excepts dependent variable, time and category columns are counted as independent variable.
         self.__fix_data_types()  # Reformat data in the dataset.
         if report:
             args = {
@@ -562,7 +568,7 @@ class Copatrec:
         grouped_data_by_cat_col = self.Data.groupby([self.Category_col])
         # Creating grouped dataframes based on the categories presented in the Dataframe.
 
-        for var in [self.Dependent_var] + self.Independent_var:
+        for var in [self.Dependent_var] + self.Independent_vars:
             lg.info('variable {} started.'.format(var).ljust(20, '-'))
             this_var_dict_intervals = {}  # dict[cat] = tuple(lower band , upper band)
             this_var_dict_standard_values = {}  # dict[cat] = values
@@ -612,7 +618,7 @@ class Copatrec:
             dict_outliers[var] = this_var_dict_outliers
             lg.info('variable {} done.'.format(var).ljust(20, '-'))
         if plot_pairs:
-            for x_var in self.Independent_var:
+            for x_var in self.Independent_vars:
                 for cat, cat_dt in grouped_data_by_cat_col:
                     x_unique_values = list(set(pd.Series(dict_standard_values[x_var][cat])))
                     # in Numpy np.nan == np.nan returns false. Which means, it can't aggregate nan values.
@@ -674,7 +680,7 @@ class Copatrec:
         dict_outliers = {}  # dict[var] = dict[time]
         grouped_data_by_time_col = self.Data.groupby([self.Time_col])
 
-        for var in [self.Dependent_var] + self.Independent_var:
+        for var in [self.Dependent_var] + self.Independent_vars:
             lg.info('variable {} started.'.format(var).ljust(20, '-'))
             this_var_dict_intervals = {}  # dict[time]
             this_var_dict_standard_values = {}  # dict[time]
@@ -721,7 +727,7 @@ class Copatrec:
             lg.info('variable {} done.'.format(var).ljust(20, '-'))
         if plot_pairs:
 
-            for x_var in self.Independent_var:
+            for x_var in self.Independent_vars:
                 for time, time_dt in grouped_data_by_time_col:
                     #  this_time_category_names = time_dt[self.Category_col].values  # Can be accessed form index
                     x_unique_values = list(set(pd.Series(dict_standard_values[x_var][time])))
@@ -785,7 +791,7 @@ class Copatrec:
         grouped_data_by_category_col = self.Data.groupby([self.Category_col])
         list_category_names = grouped_data_by_category_col[
             self.Dependent_var].describe().index.values  # getting all category names
-        for var in [self.Dependent_var] + self.Independent_var:
+        for var in [self.Dependent_var] + self.Independent_vars:
             lg.info('variable {} started.'.format(var).ljust(20, '-'))
             this_var_data, _ = self.__calc_mean_std(
                 grouped_data_by_category_col[var])  # mean of categories are used to establish the intervals
@@ -823,7 +829,7 @@ class Copatrec:
                 lg.error(Errs.E207.format(var, CST.ALL, CST.ALL))  # All rows are empty
             lg.info('variable {} done.'.format(var).ljust(20, '-'))
         if plot_pairs:
-            for x_var in self.Independent_var:
+            for x_var in self.Independent_vars:
                 x_unique_values = list(set(pd.Series(dict_standard_values[x_var])))
                 y_unique_values = list(set(pd.Series(dict_standard_values[self.Dependent_var])))
                 if (not (x_unique_values == [0] or x_unique_values == [])) and \
@@ -900,7 +906,7 @@ class Copatrec:
                                                             plot_pairs=False,
                                                             plot_hists=False)
 
-        for independent_var in self.Independent_var:
+        for independent_var in self.Independent_vars:
             lg.info(
                 "X: {}, Y: {}".format(
                     self.Dependent_var,
@@ -1051,7 +1057,7 @@ class Copatrec:
             intervals, outliers = self.cross_sectional_outliers(method=outlier_method,
                                                                 plot_pairs=False,
                                                                 plot_hists=False)
-        for independent_var in self.Independent_var:
+        for independent_var in self.Independent_vars:
             lg.info("X: {}, Y: {}".format(self.Dependent_var,
                                           independent_var).center(40, "="))
             # Selecting data for the current specific independent and dependent variable
@@ -1192,7 +1198,7 @@ class Copatrec:
             intervals, outliers = self.panel_outliers(method=outlier_method,
                                                       plot_pairs=False,
                                                       plot_hists=False)
-        for independent_var in self.Independent_var:
+        for independent_var in self.Independent_vars:
             results = dict()  # Initiating the results[equation form]
             errs = dict()  # errs[equation forms]
 
@@ -1405,7 +1411,4 @@ class Copatrec:
             if d.empty:
                 lg.error(Errs.E203)
             return d
-
-# TODO 3: Save standardized data in the data set and retrieve from there. Just do standardization if it is not in the
-# data set.
 
