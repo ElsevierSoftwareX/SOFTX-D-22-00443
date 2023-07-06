@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: copatrec
-Version: 0.0.6
+Version: 0.0.7
 Summary: Correlation pattern recognizer (Copatrec), a package to find nonlinear patterns (regressions) using Machine Learning.
 Author: Siamak Khatami
 Author-email: <siamak.khatami@ntnu.no>
@@ -40,7 +40,7 @@ preferred approaches.
 - NumPy
 - pandas
 - scipy
-- sklearn
+- scikit-learn
 
 ## Web application (On progress)
 www.copatrec.org
